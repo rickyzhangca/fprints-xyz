@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  @apply bg-[#151515];
+  @apply scrollbar;
+  @apply scrollbar-track-steel-950;
+  @apply scrollbar-thumb-steel-400;
+  scrollbar-gutter: stable;
+}
+
+::selection:not(.w-md-editor *) {
+  @apply text-white/90;
+  @apply bg-black;
+}
+
+html body[data-scroll-locked] {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+.w-md-editor {
+  @apply !overflow-hidden;
+  @apply !rounded-lg;
+  @apply !bg-steel-200;
+  --md-editor-box-shadow-color: transparent !important;
+  @apply focus-within:!bg-steel-100;
+  @apply !transition-colors;
+  @apply !duration-75;
+}
+
+.w-md-editor-toolbar {
+  @apply !bg-steel-300;
+  --color-fg-default: #0000008b !important;
+  --color-accent-fg: black !important;
+}
+
+.w-md-editor-text-input,
+.w-md-editor-text-pre {
+  @apply placeholder:!text-steel-400;
+}
+
+.w-md-editor-text-pre,
+.w-md-editor-text-input,
+.w-md-editor-text > .w-md-editor-text-pre {
+  @apply !font-sans;
+}
