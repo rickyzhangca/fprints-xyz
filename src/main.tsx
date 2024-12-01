@@ -14,7 +14,11 @@ import { NuqsAdapter } from 'nuqs/adapters/react-router';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HelmetProvider } from 'react-helmet-async';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from 'react-router-dom';
 import App from './App.tsx';
 import { BlueprintDialog, UserDialog } from './components/index.ts';
 import {
@@ -105,6 +109,10 @@ const routes = [
     path: 'lab',
     element: <Lab />,
   },
+  {
+    path: '*',
+    element: <Navigate to="/" replace />,
+  },
 ];
 
 const router = createBrowserRouter(routes);
@@ -134,7 +142,7 @@ createRoot(document.getElementById('root')!).render(
                     Thank you for trying out Fprints Beta! Please report any
                     issues on our{' '}
                     <a
-                      href="https://github.com/rickyzhangca/fprints/issues"
+                      href="https://github.com/rickyzhangca/fprints-xyz/issues"
                       target="_blank"
                       rel="noreferrer"
                       className="text-fern-400"
@@ -143,7 +151,7 @@ createRoot(document.getElementById('root')!).render(
                     </a>{' '}
                     or the{' '}
                     <a
-                      href="https://www.reddit.com/r/factorio/placeholder/"
+                      href="https://www.reddit.com/r/factorio/comments/1h2lws8/fprints_beta_the_new_blueprint_site_is_live_at/"
                       target="_blank"
                       rel="noreferrer"
                       className="text-fern-400"

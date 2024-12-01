@@ -97,68 +97,65 @@ export const AuthSignUp = () => {
             </Button>
           </div>
         </div>
-        {/* hide email sign up while waiting for aws */}
-        {false && (
-          <>
-            <div className="h-px w-full bg-steel-600" />
-            <div className="flex flex-col gap-4 p-6 pt-4">
-              <p className="text-center text-sm text-steel-400">
-                Or if you prefer the classic way
-              </p>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                  <div className="flex flex-col gap-4">
-                    <FormField
-                      name="email"
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <>
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="email"
-                                placeholder="engineer@factorio.com"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        </>
-                      )}
-                    />
-                    <FormField
-                      name="password"
-                      rules={{ required: true }}
-                      render={({ field }) => (
-                        <>
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="password"
-                                placeholder="Shhhh..."
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        </>
-                      )}
-                    />
-                    <div className="flex justify-end">
-                      <Button type="submit">Sign up</Button>
-                    </div>
-                  </div>
-                </form>
-              </Form>
-            </div>
-          </>
-        )}
+        <div className="h-px w-full bg-steel-600" />
+        <div className="flex flex-col gap-4 p-6 pt-4">
+          <p className="text-center text-sm text-steel-400">
+            Or if you prefer the classic way
+          </p>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <div className="flex flex-col gap-4">
+                <FormField
+                  name="email"
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <>
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="engineer@factorio.com"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    </>
+                  )}
+                />
+                <FormField
+                  name="password"
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <>
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="Shhhh..."
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    </>
+                  )}
+                />
+                <div className="flex justify-end">
+                  <Button type="submit" disabled={signUpWithEmail.isPending}>
+                    Sign up
+                  </Button>
+                </div>
+              </div>
+            </form>
+          </Form>
+        </div>
         {success && (
           <div className="bg-fern-400/10 p-4 text-center text-sm text-fern-400">
-            An email has been sent to {success}. Use the link to sign in for the
-            link to sign in for the first time. Thanks!
+            An email has been sent to {success} (check spam!). Click the link in
+            the email to confirm your account.
           </div>
         )}
         {error && (

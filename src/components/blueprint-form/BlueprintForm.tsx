@@ -207,7 +207,9 @@ export const BlueprintForm = ({
             data-umami-event={
               mode === 'create' ? 'create-blueprint' : 'edit-blueprint'
             }
-            type="submit"
+            type="button"
+            // for some reason, type="submit" doesn't work here
+            onClick={() => onSubmit(form.getValues())}
             disabled={createBlueprint.isPending || updateBlueprint.isPending}
           >
             {mode === 'create' ? 'Create' : 'Save'}

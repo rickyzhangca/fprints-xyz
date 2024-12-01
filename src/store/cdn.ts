@@ -2,7 +2,7 @@ import { CdnData } from '@/data';
 import { create } from 'zustand';
 
 const createFileMapper = (
-  cdnBaseUrl = 'https://fprints-data.b-cdn.net/assets/icons'
+  cdnBaseUrl = 'https://fprints-asset.b-cdn.net/icons'
 ) => {
   const fileToFolder = new Map();
 

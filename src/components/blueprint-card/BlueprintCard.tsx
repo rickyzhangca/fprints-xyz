@@ -1,12 +1,12 @@
-import { crashSite } from '@/assets';
 import { ProfilePic } from '@/components/profile-pic';
 import { useBearStore } from '@/store/states';
 import type { IBlueprintCard } from '@/supabase';
-import { Tag, Tooltip, TooltipContent, TooltipTrigger } from '@/ui';
+import { Tag } from '@/ui';
 import { tw } from '@/utils';
-import { BookIcon, ImageOffIcon, LockIcon } from 'lucide-react';
+import { ImageOffIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { LikeButton } from '../like-button';
+import { Badges } from './subcomponents/badges';
 
 type BlueprintCardProps = {
   useAbsoluteUrl?: boolean;
@@ -31,7 +31,8 @@ export const BlueprintCard = ({
               src={blueprint.image_url}
               alt="blueprint"
               className={tw(
-                'w-full bg-white/5 object-contain',
+                // #232323 seems to be factorio's background color for blueprints
+                'w-full bg-[#232323] object-contain',
                 view === 'modern' ? 'max-h-96' : 'h-64'
               )}
             />
@@ -40,31 +41,7 @@ export const BlueprintCard = ({
               <ImageOffIcon size={24} />
             </div>
           )}
-          <div className="absolute bottom-1.5 right-1.5 z-10 flex items-center gap-1">
-            {blueprint.meta?.includes('first-100') && (
-              <Tooltip>
-                <TooltipTrigger className="rounded bg-amber-400 p-1 text-steel-950">
-                  <img src={crashSite} alt="crash-site" className="size-4" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  Was at the crash site
-                  <p className="text-steel-400">
-                    The first 100 blueprints shared in Fprints
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            )}
-            {blueprint.type === 'blueprint_book' && (
-              <div className="rounded bg-sky-600 p-1 text-steel-50">
-                <BookIcon size={16} />
-              </div>
-            )}
-            {!blueprint.is_public && (
-              <div className="rounded bg-steel-200 p-1 text-steel-950">
-                <LockIcon size={16} />
-              </div>
-            )}
-          </div>
+          <Badges blueprint={blueprint} />
         </div>
       </Link>
       <div
@@ -73,12 +50,12 @@ export const BlueprintCard = ({
           view === 'classic' && 'px-2.5'
         )}
       >
-        <div className="h-10">
+        <div className={tw(view === 'classic' && 'h-10')}>
           <Link
             to={`/blueprint/${blueprint.id}`}
             className={tw(
-              'text-steel-50',
-              view === 'classic' && 'line-clamp-2 text-sm'
+              'text-steel-50 text-sm',
+              view === 'classic' && 'line-clamp-2'
             )}
           >
             {blueprint.title}

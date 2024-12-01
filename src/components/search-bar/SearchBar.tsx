@@ -122,7 +122,7 @@ export const SearchBar = () => {
     noSpaceAge: {
       children: (
         <img
-          src="https://fprints-data.b-cdn.net/assets/ui/no-space-age.webp"
+          src="https://fprints-asset.b-cdn.net/ui/no-space-age.webp"
           className="size-8"
           alt="no-space-age"
         />
@@ -142,7 +142,7 @@ export const SearchBar = () => {
     noBeacon: {
       children: (
         <img
-          src="https://fprints-data.b-cdn.net/assets/ui/no-beacon.webp"
+          src="https://fprints-asset.b-cdn.net/ui/no-beacon.webp"
           className="size-8"
           alt="no-beacon"
         />
@@ -153,6 +153,44 @@ export const SearchBar = () => {
         setExcludeTagIds([]);
         setIncludeComponents([]);
         setExcludeComponents(['beacon']);
+      },
+    },
+    noElevatedRails: {
+      children: (
+        <img
+          src="https://fprints-asset.b-cdn.net/ui/no-elevated-rails.webp"
+          className="size-8"
+          alt="no-elevated-rails"
+        />
+      ),
+      tooltip: 'Filter out blueprints that require elevated rails',
+      action: () => {
+        setIncludeTagIds([]);
+        setExcludeTagIds([]);
+        setIncludeComponents([]);
+        setExcludeComponents([
+          'elevated-curved-rail-a',
+          'elevated-curved-rail-b',
+          'elevated-curved-rail',
+          'elevated-rail',
+          'elevated-half-diagonal-rail',
+        ]);
+      },
+    },
+    spacePlatform: {
+      children: (
+        <img
+          src="https://fprints-asset.b-cdn.net/ui/space-platform.webp"
+          className="size-8"
+          alt="space-platform"
+        />
+      ),
+      tooltip: 'Only space platform blueprints',
+      action: () => {
+        setIncludeTagIds([]);
+        setExcludeTagIds([]);
+        setIncludeComponents(['space-platform-foundation']);
+        setExcludeComponents([]);
       },
     },
   };

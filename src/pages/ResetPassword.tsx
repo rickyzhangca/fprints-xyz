@@ -1,4 +1,4 @@
-import { useGetProfile, useResetPassword } from '@/hooks';
+import { useUpdatePassword } from '@/hooks';
 import {
   Button,
   Dialog,
@@ -27,8 +27,7 @@ const schema = z.object({
 });
 
 export const ResetPassword = () => {
-  const getProfile = useGetProfile();
-  const resetPassword = useResetPassword();
+  const updatePassword = useUpdatePassword();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof schema>>({
@@ -39,7 +38,7 @@ export const ResetPassword = () => {
   });
 
   const onSubmit = (values: z.infer<typeof schema>) => {
-    resetPassword.mutate(values.password, {
+    updatePassword.mutate(values.password, {
       onError: () => {
         form.setError('password', {
           type: 'manual',
@@ -51,16 +50,10 @@ export const ResetPassword = () => {
   };
 
   useEffect(() => {
-    if (getProfile.data) {
+    if (updatePassword.isSuccess) {
       navigate('/');
     }
-  }, [getProfile.data, navigate]);
-
-  useEffect(() => {
-    if (resetPassword.isSuccess) {
-      navigate('/');
-    }
-  }, [resetPassword.isSuccess, navigate]);
+  }, [updatePassword.isSuccess, navigate]);
 
   return (
     <Dialog open>

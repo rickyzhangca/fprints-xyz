@@ -1,6 +1,7 @@
 import type { Database, ICollection, IProfile } from '@/supabase';
 import { supabase } from '@/supabase';
 import { Session, SupabaseClient, User } from '@supabase/supabase-js';
+import isMobile from 'is-mobile';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -36,6 +37,14 @@ export interface BearState extends PersistedState {
   setBlueprintCardsPerPage: (blueprintCardsPerPage: number) => void;
 }
 
+const getOptimalCardsPerPage = () => {
+  if (typeof window === 'undefined') return 30;
+  if (isMobile({ tablet: false })) {
+    return 10;
+  }
+  return 30;
+};
+
 export const useBearStore = create<BearState>()(
   persist(
     set => ({
@@ -49,7 +58,7 @@ export const useBearStore = create<BearState>()(
       columns: 4,
       showAdvancedFilters: false,
       likesHistory: [],
-      blueprintCardsPerPage: 35,
+      blueprintCardsPerPage: getOptimalCardsPerPage(),
       setSession: session => set({ session }),
       setUser: user => set({ user }),
       setProfile: profile => set({ profile }),

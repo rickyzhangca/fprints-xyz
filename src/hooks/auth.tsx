@@ -10,13 +10,18 @@ export const useSignUpWithEmail = () => {
     Error,
     { email: string; password: string }
   >({
-    mutationFn: async ({
-      email,
-      password,
-    }: {
-      email: string;
-      password: string;
-    }) => {
+    mutationFn: async ({ email, password }) => {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password: '',
+      });
+
+      if (error) {
+        if (error.message != 'Invalid login credentials') {
+          throw new Error('Email already exists');
+        }
+      }
+
       const res = await supabase.auth.signUp({
         email,
         password,
@@ -24,7 +29,9 @@ export const useSignUpWithEmail = () => {
           emailRedirectTo: 'https://fprints.xyz/new-profile',
         },
       });
-      if (res?.error) throw new Error(res.error.message);
+      if (res.error) throw new Error(res.error.message);
+      if (res.data.user?.identities?.length === 0)
+        throw new Error('Email already exists');
       return res.data;
     },
   });
@@ -54,7 +61,7 @@ export const useLogInWithEmail = () => {
   });
 };
 
-export const useResetPassword = () => {
+export const useForgotPasswordWithEmail = () => {
   const supabase = useBearStore(state => state.supabase);
 
   return useMutation({
@@ -145,6 +152,18 @@ export const useSignOut = () => {
       queryClient.removeQueries({ queryKey: ['get-user-profile'] });
       queryClient.removeQueries({ queryKey: ['get-user-collections'] });
       navigate('/');
+    },
+  });
+};
+
+export const useUpdatePassword = () => {
+  const supabase = useBearStore(state => state.supabase);
+
+  return useMutation({
+    mutationFn: async (password: string) => {
+      await supabase.auth.updateUser({
+        password,
+      });
     },
   });
 };

@@ -28,7 +28,7 @@ import {
 import { tw } from '@/utils';
 import { Link2Icon, RadiationIcon, XIcon } from 'lucide-react';
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const MarkdownPreview = lazy(() =>
   import('@uiw/react-md-editor').then(mdx => ({
@@ -38,9 +38,10 @@ const MarkdownPreview = lazy(() =>
 
 export const BlueprintDialog = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const session = useBearStore(state => state.session);
   const { blueprintId } = useParams();
-  const { data: blueprint } = useGetBlueprint(blueprintId ?? '');
+  const { data: blueprint, isSuccess } = useGetBlueprint(blueprintId ?? '');
   const parseBlueprintString = useParseBlueprintString();
   const [isEditing, setIsEditing] = useState(false);
   const deleteBlueprint = useDeleteBlueprint();
@@ -64,16 +65,28 @@ export const BlueprintDialog = () => {
     }
   };
 
-  if (!blueprint || !blueprintId) {
+  const handleClose = () => {
+    const parentPath = location.pathname.split('/blueprint/')[0];
+    navigate({
+      pathname: parentPath || '/',
+      search: location.search,
+    });
+  };
+
+  if (isSuccess && !blueprint) {
     navigate('/');
     return null;
   }
+
+  if (!blueprint || !blueprintId) return null;
 
   return (
     <Dialog
       open={!!blueprintId}
       onOpenChange={open => {
-        if (!open) navigate(-1);
+        if (!open) {
+          handleClose();
+        }
       }}
     >
       <Helmet blueprint={blueprint} />
@@ -91,7 +104,7 @@ export const BlueprintDialog = () => {
         <div className="flex h-full flex-col overflow-auto scrollbar scrollbar-track-steel-900 scrollbar-thumb-steel-500 md:flex-row md:overflow-hidden">
           <div className="relative flex h-[50vh] w-full items-center justify-center bg-gray-950 md:h-full">
             <button
-              onClick={() => navigate(-1)}
+              onClick={handleClose}
               className="absolute left-2 top-2 flex items-center gap-2 rounded-2xl bg-black/50 p-3 pr-4 text-steel-300 transition-colors duration-75 hover:bg-black/60 hover:text-steel-50"
             >
               <XIcon
@@ -138,7 +151,7 @@ export const BlueprintDialog = () => {
                             '--color-border-muted': '#474747',
                             '--color-border-default': '#333',
                             '--color-canvas-default': 'transparent',
-                            '--color-fg-default': '#fff',
+                            '--color-fg-default': '#e7e6e7',
                           } as React.CSSProperties
                         }
                         wrapperElement={{
