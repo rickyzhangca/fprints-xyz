@@ -53,8 +53,6 @@ export const BlueprintString = ({
     setBlueprintData({});
     if (shouldParse) {
       const parsed = parseBlueprintString(value);
-      console.log(BlueprintUtils.Analysis.getComponents(parsed));
-
       if (parsed) setBlueprintData(parsed);
     }
   };

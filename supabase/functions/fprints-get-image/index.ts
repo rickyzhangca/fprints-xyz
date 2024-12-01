@@ -2,44 +2,12 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-
-// Define allowed origins for CORS
-const ALLOWED_ORIGINS = [
-  'http://localhost:5173',
-  'https://fprints.xyz'
-]
-
-const corsHeaders = (origin: string) => ({
-  'Access-Control-Allow-Origin': ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0],
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Vary': 'Origin'
-})
+import { corsHeaders, handleCors } from '../_shared/cors.ts'
 
 serve(async (req: Request) => {
-  const origin = req.headers.get('origin') || ALLOWED_ORIGINS[0]
-
-  // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: corsHeaders(origin)
-    })
-  }
-
-  // Check if origin is allowed
-  if (!ALLOWED_ORIGINS.includes(origin)) {
-    return new Response(
-      JSON.stringify({ error: 'Origin not allowed' }),
-      {
-        status: 403,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders(ALLOWED_ORIGINS[0])
-        }
-      }
-    )
-  }
+  // Handle CORS preflight
+  const corsResponse = handleCors(req)
+  if (corsResponse) return corsResponse
 
   try {
     // Get image URL from request body
@@ -65,7 +33,7 @@ serve(async (req: Request) => {
       headers: {
         'Content-Type': contentType || 'image/jpeg', // Fallback to jpeg if no content type
         'Cache-Control': 'public, max-age=31536000', // Cache for 1 year
-        ...corsHeaders(origin)
+        ...corsHeaders
       }
     })
 
@@ -79,7 +47,7 @@ serve(async (req: Request) => {
         status: 400,
         headers: {
           'Content-Type': 'application/json',
-          ...corsHeaders(origin)
+          ...corsHeaders
         }
       }
     )

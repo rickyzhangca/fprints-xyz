@@ -202,6 +202,7 @@ export const BlueprintDialog = () => {
                       <DropdownMenuItem
                         className="text-red-500 focus:bg-red-500 focus:text-steel-950"
                         onSelect={handleDelete}
+                        data-umami-event="delete-blueprint"
                       >
                         <RadiationIcon
                           size={16}

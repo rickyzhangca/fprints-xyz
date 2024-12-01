@@ -76,6 +76,9 @@ export const BlueprintForm = ({
     form.reset(initialValues);
   }, [initialValues, form]);
 
+  const isPending =
+    bunnyUpload.isPending || createBlueprint.isPending || updateBlueprint.isPending;
+
   const onSubmit = async (values: ICreateBlueprintFormValues) => {
     let url = '';
     if (values.image_url) {
@@ -210,9 +213,16 @@ export const BlueprintForm = ({
             type="button"
             // for some reason, type="submit" doesn't work here
             onClick={() => onSubmit(form.getValues())}
-            disabled={createBlueprint.isPending || updateBlueprint.isPending}
+            disabled={isPending
+            }
           >
-            {mode === 'create' ? 'Create' : 'Save'}
+            {mode === 'create'
+              ? isPending
+                ? 'Creating...'
+                : 'Create'
+              : isPending
+                ? 'Saving...'
+                : 'Save'}
           </Button>
         </DialogFooter>
       </form>

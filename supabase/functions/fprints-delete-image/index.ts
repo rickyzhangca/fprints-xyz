@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
+import { corsHeaders, handleCors } from '../_shared/cors.ts'
 
 const BUNNY_API_KEY = Deno.env.get('BUNNY_API_KEY')
 const BUNNY_STORAGE_ZONE = Deno.env.get('BUNNY_STORAGE_ZONE')
@@ -18,46 +19,13 @@ const supabaseClient = createClient(
   }
 )
 
-// Define allowed origins
-const ALLOWED_ORIGINS = [
-  'http://localhost:5173',  
-  'https://fprints.xyz'
-]
-
-const corsHeaders = (origin: string) => ({
-  'Access-Control-Allow-Origin': ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0],
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Vary': 'Origin'
-})
-
 serve(async (req: Request) => {
-  const origin = req.headers.get('origin') || ALLOWED_ORIGINS[0]
-
-  // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: corsHeaders(origin)
-    })
-  }
-
-  // Check if origin is allowed
-  if (!ALLOWED_ORIGINS.includes(origin)) {
-    return new Response(
-      JSON.stringify({ error: 'Origin not allowed' }),
-      {
-        status: 403,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders(ALLOWED_ORIGINS[0])
-        }
-      }
-    )
-  }
+  // Handle CORS preflight
+  const corsResponse = handleCors(req)
+  if (corsResponse) return corsResponse
 
   try {
-    // Verify authentication
+    // Get user session
     const authHeader = req.headers.get('Authorization')
     if (!authHeader) {
       throw new Error('No authorization header')
@@ -105,7 +73,7 @@ serve(async (req: Request) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          ...corsHeaders(origin)
+          ...corsHeaders
         },
       }
     )
@@ -121,7 +89,7 @@ serve(async (req: Request) => {
         status,
         headers: {
           'Content-Type': 'application/json',
-          ...corsHeaders(origin)
+          ...corsHeaders
         },
       }
     )

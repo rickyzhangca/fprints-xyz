@@ -1,45 +1,12 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'jsr:@supabase/supabase-js@2'
+import { handleCors, openCorsHeaders } from '../_shared/cors.ts'
 
-// Define allowed User-Agent patterns for API tools
-const ALLOWED_USER_AGENTS = [
-  /^HTTPie/,
-  /^PostmanRuntime/,
-  /^insomnia/,
-  /^curl/,
-  /^Postman/
-]
-
-const corsHeaders = {
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, user-agent',
-}
 
 serve(async (req) => {
-  // Handle CORS preflight requests
-  if (req.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: corsHeaders
-    })
-  }
-
-  // Check if User-Agent is allowed
-  const userAgent = req.headers.get('user-agent') || ''
-  const isAllowedClient = ALLOWED_USER_AGENTS.some(pattern => pattern.test(userAgent))
-
-  if (!isAllowedClient) {
-    return new Response(
-      JSON.stringify({ error: 'Access denied. Only API tools are allowed.' }),
-      {
-        status: 403,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders
-        }
-      }
-    )
-  }
+  // Handle CORS preflight
+  const corsResponse = handleCors(req, openCorsHeaders)
+  if (corsResponse) return corsResponse
 
   try {
     // Create Supabase client
@@ -65,7 +32,7 @@ serve(async (req) => {
           status: 400,
           headers: {
             'Content-Type': 'application/json',
-            ...corsHeaders
+            ...openCorsHeaders
           }
         }
       )
@@ -87,7 +54,7 @@ serve(async (req) => {
         status: 200,
         headers: {
           'Content-Type': 'application/json',
-          ...corsHeaders
+          ...openCorsHeaders
         }
       }
     )
@@ -98,7 +65,7 @@ serve(async (req) => {
         status: 500,
         headers: {
           'Content-Type': 'application/json',
-          ...corsHeaders
+          ...openCorsHeaders
         }
       }
     )
