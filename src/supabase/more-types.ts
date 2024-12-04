@@ -13,3 +13,10 @@ export type IProfile = Database['public']['Tables']['user_profiles']['Row'];
 export type ICollection = Database['public']['Tables']['collections']['Row'];
 
 export type ITag = Database['public']['Tables']['tags']['Row'];
+
+export const SupabaseEdgeFunctions = {
+  proxyFactorioBinApi: 'fprints-proxy-factorio-bin-api',
+  proxyFactorioSchoolApi: 'fprints-proxy-factorio-school-api',
+  bunnyUpload: 'fprints-bunny',
+  getImage: 'fprints-get-image',
+} as const;

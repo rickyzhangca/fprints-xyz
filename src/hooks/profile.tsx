@@ -23,7 +23,7 @@ export const useGetProfile = () => {
       setProfile(data);
       return data as IProfile;
     },
-    enabled: !!session,
+    enabled: !!session?.user.id,
     retry: false,
   });
 };

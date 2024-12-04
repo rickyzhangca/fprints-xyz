@@ -18,7 +18,7 @@ export const UpgradePlannerComponents = ({
   return (
     <div className="flex flex-wrap gap-x-3 gap-y-2 border-t border-steel-700 p-2">
       {mappers.map((mapper, i) => (
-        <div className="flex items-center gap-0.5">
+        <div key={i} className="flex items-center gap-0.5">
           <UpgradePlannerComponentIcon
             key={`from-${i}`}
             component={mapper.from?.name ? mapper.from?.name : '_missing'}

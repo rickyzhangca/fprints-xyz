@@ -1,4 +1,5 @@
 import { useBearStore } from '@/store';
+import { supabase, SupabaseEdgeFunctions } from '@/supabase';
 import { optionallyRemoveTrailingSlash } from '@/utils';
 import { useMutation } from '@tanstack/react-query';
 
@@ -64,22 +65,17 @@ export const usePostGetFactorioBinData = () => {
       if (!session?.access_token) {
         throw new Error('No authentication token found');
       }
-
-      const response = await fetch(
-        `${import.meta.env.VITE_GET_FACTORIO_BIN_DATA}`,
+      const res = await supabase.functions.invoke(
+        SupabaseEdgeFunctions.proxyFactorioBinApi,
         {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+          body: {
             type: 'info',
             url: optionallyRemoveTrailingSlash(url),
-          }),
+          },
         }
       );
-      const data = await response.json();
+      if (res.error) throw new Error('Failed to fetch factorio bin data');
+      const data = res.data;
       const parsed = factorioBinSchema.safeParse(data);
       if (!parsed.success) throw new Error('Failed to parse factorio bin data');
       return parsed.data;
@@ -97,21 +93,17 @@ export const usePostGetFactorioBinString = () => {
         throw new Error('No authentication token found');
       }
 
-      const response = await fetch(
-        `${import.meta.env.VITE_GET_FACTORIO_BIN_DATA}`,
+      const res = await supabase.functions.invoke(
+        SupabaseEdgeFunctions.proxyFactorioBinApi,
         {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${session.access_token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+          body: {
             type: 'string',
             url: optionallyRemoveTrailingSlash(url),
-          }),
+          },
         }
       );
-      const data = await response.text();
+      if (res.error) throw new Error('Failed to fetch factorio bin string');
+      const data = res.data;
       const parsed = z.string().safeParse(data);
       if (!parsed.success)
         throw new Error('Failed to parse factorio bin string');

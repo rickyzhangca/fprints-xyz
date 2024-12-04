@@ -118,6 +118,7 @@ export type Database = {
         Row: {
           blueprint_string: string
           components: string[]
+          copy_count: number
           created_at: string
           description: string
           forked_from_id: string | null
@@ -135,6 +136,7 @@ export type Database = {
         Insert: {
           blueprint_string: string
           components?: string[]
+          copy_count?: number
           created_at?: string
           description?: string
           forked_from_id?: string | null
@@ -152,6 +154,7 @@ export type Database = {
         Update: {
           blueprint_string?: string
           components?: string[]
+          copy_count?: number
           created_at?: string
           description?: string
           forked_from_id?: string | null
@@ -522,6 +525,7 @@ export type Database = {
           collected_by_current_user_at: string | null
           collection_count: number | null
           components: string[] | null
+          copy_count: number | null
           created_at: string | null
           data_fetched_at: string | null
           description: string | null
@@ -675,7 +679,12 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      increment_blueprint_copy_count: {
+        Args: {
+          blueprint_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       type:

@@ -1,4 +1,5 @@
 import { useBearStore } from '@/store';
+import { supabase, SupabaseEdgeFunctions } from '@/supabase';
 import { useMutation, type UseMutationResult } from '@tanstack/react-query';
 import imageCompression from 'browser-image-compression';
 
@@ -22,11 +23,10 @@ type SizeBracket = {
 };
 
 const SIZE_BRACKETS: readonly SizeBracket[] = [
-  { maxSize: 1024 * 1024, targetSize: 250 * 1024 }, // < 1MB -> 250KB
-  { maxSize: 5 * 1024 * 1024, targetSize: 1024 * 1024 }, // 1-5MB -> 1MB
-  { maxSize: 10 * 1024 * 1024, targetSize: 2 * 1024 * 1024 }, // 5-10MB -> 2MB
-  { maxSize: 20 * 1024 * 1024, targetSize: 3 * 1024 * 1024 }, // 10-20MB -> 3MB
-  { maxSize: 50 * 1024 * 1024, targetSize: 5 * 1024 * 1024 }, // 20-50MB -> 5MB
+  { maxSize: 2 * 1024 * 1024, targetSize: 500 * 1024 }, // < 2MB -> 500KB
+  { maxSize: 10 * 1024 * 1024, targetSize: 2 * 1024 * 1024 }, // 2-10MB -> 2MB
+  { maxSize: 20 * 1024 * 1024, targetSize: 4 * 1024 * 1024 }, // 10-20MB -> 4MB
+  { maxSize: 100 * 1024 * 1024, targetSize: 5 * 1024 * 1024 }, // 20-100MB -> 5MB
 ];
 
 /**
@@ -115,23 +115,16 @@ export const useBunnyUpload = (): UseMutationResult<
 
     const base64Data = await fileToBase64(compressedFile);
 
-    const response = await fetch(import.meta.env.VITE_BUNNY_UPLOAD_URL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${session.access_token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ base64Data }),
-    });
-
-    if (!response.ok) {
-      const error = await response
-        .json()
-        .catch(() => ({ error: 'Failed to upload image' }));
-      throw new Error(error.error || 'Failed to upload image');
+    const res = await supabase.functions.invoke(
+      SupabaseEdgeFunctions.bunnyUpload,
+      {
+        body: JSON.stringify({ base64Data }),
+      }
+    );
+    if (res.error) {
+      throw new Error('Failed to upload image');
     }
-
-    return response.json();
+    return res.data;
   };
 
   return useMutation({
@@ -150,22 +143,17 @@ export const usePostGetImage = (): UseMutationResult<File, Error, string> => {
       if (!session?.access_token) {
         throw new Error('No authentication token found');
       }
-
-      const response = await fetch(import.meta.env.VITE_GET_IMAGE, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ url }),
-      });
-
-      if (!response.ok) {
+      const res = await supabase.functions.invoke(
+        SupabaseEdgeFunctions.getImage,
+        {
+          body: JSON.stringify({ url }),
+        }
+      );
+      if (res.error) {
         throw new Error('Failed to fetch image');
       }
-
-      const contentType = response.headers.get('Content-Type') || 'image/jpeg';
-      const blob = await response.blob();
+      const contentType = res.data.headers.get('Content-Type') || 'image/jpeg';
+      const blob = await res.data.blob();
 
       // Create a File object with the correct content type
       const extension = contentType.split('/')[1] || 'jpg';

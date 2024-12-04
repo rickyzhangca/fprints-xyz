@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --clearScreen false",
+    "dev": "infisical run --env=dev -- vite --clearScreen false",
+    "prod": "infisical run --env=prod -- vite --clearScreen false",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "format": "prettier --write \"src/**/*.{ts,tsx,md,css,json}\"",
@@ -33,7 +34,7 @@
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@supabase/supabase-js": "^2.46.2",
-    "@tanstack/react-query": "^5.62.0",
+    "@tanstack/react-query": "^5.62.2",
     "@uiw/react-md-editor": "^4.0.4",
     "browser-image-compression": "^2.0.2",
     "class-variance-authority": "^0.7.1",
@@ -41,7 +42,7 @@
     "cmdk": "^1.0.4",
     "fromnow": "^3.0.1",
     "is-mobile": "^5.0.0",
-    "lucide-react": "^0.462.0",
+    "lucide-react": "^0.464.0",
     "nuqs": "^2.2.3",
     "pako": "^2.1.0",
     "react": "^18.3.1",
@@ -49,7 +50,7 @@
     "react-helmet-async": "^2.0.5",
     "react-hook-form": "^7.53.2",
     "react-responsive-masonry": "^2.4.1",
-    "react-router-dom": "^7.0.1",
+    "react-router-dom": "^7.0.2",
     "tailwind-merge": "^2.5.5",
     "zod": "^3.23.8",
     "zustand": "^5.0.1"
@@ -66,13 +67,13 @@
     "prettier": "^3.4.1",
     "prettier-plugin-tailwindcss": "^0.6.9",
     "prop-types": "^15.8.1",
-    "supabase": "^1.223.10",
+    "supabase": "^1.226.3",
     "tailwind-scrollbar": "^3.1.0",
-    "tailwindcss": "^3.4.15",
+    "tailwindcss": "^3.4.16",
     "tailwindcss-animate": "^1.0.7",
     "terser": "^5.36.0",
     "typescript": "~5.7.2",
-    "vite": "^6.0.1",
-    "vitest": "^2.1.6"
+    "vite": "^6.0.2",
+    "vitest": "^2.1.8"
   }
 }

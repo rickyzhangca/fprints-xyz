@@ -119,6 +119,7 @@ export const useGetMyBlueprints = () => {
         });
       return data ?? [];
     },
+    enabled: !!session?.user.id,
   });
 };
 

@@ -11,7 +11,8 @@ export interface ButtonProps
     | 'liked'
     | 'collect'
     | 'collected'
-    | 'link';
+    | 'link'
+    | 'headless';
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
 }
@@ -27,6 +28,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       rightIcon && 'pr-3 pl-3.5'
     );
     const variants = {
+      headless: 'p-0 h-auto min-w-fit',
       primary:
         'bg-fern-400 text-steel-950 hover:bg-fern-500 active:bg-fern-600 disabled:text-fern-800',
       like: 'bg-transparent text-white border hover:border-transparent border-steel-500 hover:bg-red-500 active:bg-red-600 disabled:text-red-800',

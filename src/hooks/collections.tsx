@@ -7,7 +7,7 @@ export const useGetCollections = () => {
   const session = useBearStore(state => state.session);
 
   return useQuery({
-    queryKey: ['get-user-collections'],
+    queryKey: ['get-user-collections', session?.user.id],
     queryFn: async () => {
       const { data, error } = await supabase!
         .from('collections')
@@ -17,7 +17,7 @@ export const useGetCollections = () => {
       if (error) throw error;
       return data as ICollection[];
     },
-    enabled: !!session,
+    enabled: !!session?.user.id,
   });
 };
 

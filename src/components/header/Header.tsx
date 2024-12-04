@@ -7,9 +7,27 @@ import {
 } from '@/components/header/subcomponents';
 import { SearchBar } from '@/components/search-bar';
 import { useBearStore } from '@/store';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/ui';
+import { UserIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export const Header = () => {
   const { session, supabase } = useBearStore();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOpen) setIsOpen(false);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen]);
 
   if (!supabase) return null;
 
@@ -25,8 +43,23 @@ export const Header = () => {
           <AuthLogOut />
         ) : (
           <>
-            <AuthSignUp />
-            <AuthLogin />
+            <div className="hidden items-center gap-2 md:flex">
+              <AuthSignUp />
+              <AuthLogin />
+            </div>
+            <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+              <DropdownMenuTrigger className="md:hidden">
+                <UserIcon size={16} absoluteStrokeWidth strokeWidth={2} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={e => e.preventDefault()}>
+                  <AuthSignUp />
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={e => e.preventDefault()}>
+                  <AuthLogin />
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </>
         )}
       </div>

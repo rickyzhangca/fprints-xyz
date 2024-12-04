@@ -262,7 +262,10 @@ export const AuthLogin = () => {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button variant="ghost">Login</Button>
+        <Button variant="ghost" className="hidden md:flex">
+          Login
+        </Button>
+        <p className="block md:hidden">Log in</p>
       </DialogTrigger>
       <DialogContent className="gap-0 p-0">
         {isForgot ? (

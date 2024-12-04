@@ -1,4 +1,5 @@
-import { IBlueprintDetails } from '@/supabase/more-types';
+import { IBlueprintDetails } from '@/supabase';
+import { getPermalink } from '@/utils';
 import { Helmet as ReactHelmet } from 'react-helmet-async';
 
 export const Helmet = ({ blueprint }: { blueprint: IBlueprintDetails }) => {
@@ -18,7 +19,7 @@ export const Helmet = ({ blueprint }: { blueprint: IBlueprintDetails }) => {
 
   return (
     <ReactHelmet>
-      <title>{`${blueprint.title} - Factorio Blueprint | Fprints`}</title>
+      <title>{`${blueprint.title} | Fprints`}</title>
       <meta
         name="description"
         content={
@@ -26,10 +27,7 @@ export const Helmet = ({ blueprint }: { blueprint: IBlueprintDetails }) => {
           `Factorio blueprint: ${blueprint.title}. Created by ${blueprint.user_handle}`
         }
       />
-      <meta
-        property="og:title"
-        content={`${blueprint.title} - Factorio Blueprint`}
-      />
+      <meta property="og:title" content={`${blueprint.title} | Fprints`} />
       <meta
         property="og:description"
         content={
@@ -38,6 +36,8 @@ export const Helmet = ({ blueprint }: { blueprint: IBlueprintDetails }) => {
         }
       />
       <meta property="og:image" content={blueprint.image_url || ''} />
+      <meta property="og:url" content={getPermalink(blueprint.id || '')} />
+      <meta property="og:site_name" content="Fprints" />
       <meta property="og:type" content="article" />
       {blueprint.user_handle && (
         <meta name="author" content={blueprint.user_handle} />

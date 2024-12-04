@@ -63,11 +63,13 @@ export const AuthSignUp = () => {
     <Dialog>
       <DialogTrigger>
         <Button
+          className="hidden md:flex"
           variant="secondary"
           leftIcon={<UserIcon size={16} absoluteStrokeWidth />}
         >
           Sign up
         </Button>
+        <p className="block md:hidden">Sign up</p>
       </DialogTrigger>
       <DialogContent className="gap-0 p-0">
         <div className="flex flex-col gap-4 p-6">

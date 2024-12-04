@@ -30,7 +30,6 @@ export const SearchBar = () => {
   const setShowAdvancedFilters = useBearStore(
     state => state.setShowAdvancedFilters
   );
-  const getTags = useGetTags(true);
 
   // previous search
   const [searchString] = useQueryState('string');
@@ -72,6 +71,7 @@ export const SearchBar = () => {
 
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const getTags = useGetTags(open);
 
   const handleSearch = async () => {
     const queryParams = new URLSearchParams();

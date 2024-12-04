@@ -13,6 +13,7 @@ import {
   useDeleteBlueprint,
   useGetBlueprint,
   useParseBlueprintString,
+  useRPCCopy,
 } from '@/hooks';
 import { useBearStore } from '@/store';
 import {
@@ -29,6 +30,7 @@ import { tw } from '@/utils';
 import { Link2Icon, RadiationIcon, XIcon } from 'lucide-react';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Copied } from './subcomponents/copied';
 
 const MarkdownPreview = lazy(() =>
   import('@uiw/react-md-editor').then(mdx => ({
@@ -45,12 +47,13 @@ export const BlueprintDialog = () => {
   const parseBlueprintString = useParseBlueprintString();
   const [isEditing, setIsEditing] = useState(false);
   const deleteBlueprint = useDeleteBlueprint();
+  const rpcCopy = useRPCCopy();
 
   useEffect(() => {
-    if (blueprint?.blueprint_string) {
+    if (blueprint?.blueprint_string && !parseBlueprintString.data) {
       parseBlueprintString.mutate(blueprint.blueprint_string);
     }
-  }, [blueprint?.blueprint_string]);
+  }, [blueprint?.id]);
 
   const handleDelete = async () => {
     if (!blueprintId) return;
@@ -59,7 +62,7 @@ export const BlueprintDialog = () => {
         blueprintId,
         blueprintImageUrl: blueprint?.image_url ?? '',
       });
-      navigate(-1);
+      handleClose();
     } catch (error) {
       console.error('Error deleting blueprint:', error);
     }
@@ -92,7 +95,7 @@ export const BlueprintDialog = () => {
       <Helmet blueprint={blueprint} />
       <DialogContent
         className={tw(
-          'flex w-[calc(100vw-3rem)] max-w-[1920px] flex-col gap-0 overflow-hidden rounded-3xl bg-steel-950 p-0 shadow-2xl md:h-[calc(100vh-6rem)] xl:w-[calc(100vw-8rem)] 2xl:w-[calc(100vw-12rem)] 3xl:w-[calc(100vw-16rem)]',
+          'flex h-screen max-h-screen w-screen max-w-[1920px] flex-col gap-0 overflow-hidden rounded-none bg-steel-950 p-0 shadow-2xl sm:h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)] sm:w-[calc(100vw-2rem)] sm:rounded-xl md:h-[calc(100vh-6rem)] md:rounded-3xl xl:w-[calc(100vw-8rem)] 2xl:w-[calc(100vw-12rem)] 3xl:w-[calc(100vw-16rem)]',
           isEditing && 'hidden'
         )}
         aria-labelledby="blueprint-title"
@@ -162,14 +165,23 @@ export const BlueprintDialog = () => {
                   </Suspense>
                 )}
               </div>
-              {parseBlueprintString.data && (
+              {parseBlueprintString.data ? (
                 <section
                   className="flex w-full flex-col gap-2"
                   aria-label="Components"
                 >
                   <h2 className="font-medium text-steel-300">Components</h2>
-                  <BlueprintGlance blueprintData={parseBlueprintString.data} />
+                  <BlueprintGlance
+                    blueprintData={parseBlueprintString.data}
+                    onCopy={() =>
+                      rpcCopy.mutate({ blueprintId: blueprint.id ?? '' })
+                    }
+                  />
                 </section>
+              ) : (
+                <div className="flex w-full items-center justify-center px-2 py-4 text-steel-500">
+                  Loading...
+                </div>
               )}
               <section
                 className="flex flex-col gap-2"
@@ -221,11 +233,12 @@ export const BlueprintDialog = () => {
                 {blueprint.updated_at !== blueprint.created_at && (
                   <Updated updated_at={blueprint.updated_at} />
                 )}
+                <Collected collection_count={blueprint.collection_count} />
+                <Copied copy_count={blueprint.copy_count} />
                 <By
                   user_handle={blueprint.user_handle}
                   user_id={blueprint.user_id}
                 />
-                <Collected collection_count={blueprint.collection_count} />
               </footer>
             </div>
             <div className="hidden lg:block">
