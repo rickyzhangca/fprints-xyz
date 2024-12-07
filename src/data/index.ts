@@ -5,3 +5,6 @@ export { cdnData };
 
 export type ComponentsData = Record<string, string[][]>;
 export { componentsData };
+
+    export * from './swappables';
+

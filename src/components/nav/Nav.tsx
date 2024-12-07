@@ -1,3 +1,4 @@
+import { useGetLikesCount, useGetMyPrintsCount } from '@/hooks';
 import { sortOptions, useBearStore } from '@/store';
 import {
   Button,
@@ -14,11 +15,17 @@ import { Link, useLocation } from 'react-router-dom';
 
 const MyLikes = () => {
   const { session } = useBearStore();
+  const getLikesCount = useGetLikesCount();
 
   if (session)
     return (
       <Link to="/liked" className="h-full">
-        <TabsTrigger value="liked">Liked</TabsTrigger>
+        <TabsTrigger value="liked" className="gap-2">
+          Liked
+          {getLikesCount.data && (
+            <p className="text-steel-500">{getLikesCount.data}</p>
+          )}
+        </TabsTrigger>
       </Link>
     );
   return (
@@ -41,7 +48,12 @@ const Collections = () => {
           to={`/collection/${c.id}`}
           className="h-full"
         >
-          <TabsTrigger value={c.id}>{c.title}</TabsTrigger>
+          <TabsTrigger value={c.id} className="gap-2">
+            {c.title}
+            {c.blueprint_count.count && (
+              <p className="text-steel-500">{c.blueprint_count.count}</p>
+            )}
+          </TabsTrigger>
         </Link>
       ))}
     </>
@@ -50,11 +62,16 @@ const Collections = () => {
 
 const MyPrints = () => {
   const { session } = useBearStore();
-
+  const getMyPrintsCount = useGetMyPrintsCount();
   if (session)
     return (
       <Link to="/my-blueprints" className="h-full">
-        <TabsTrigger value="my-blueprints">My prints</TabsTrigger>
+        <TabsTrigger value="my-blueprints" className="gap-2">
+          My prints
+          {getMyPrintsCount.data && (
+            <p className="text-steel-500">{getMyPrintsCount.data}</p>
+          )}
+        </TabsTrigger>
       </Link>
     );
   return (

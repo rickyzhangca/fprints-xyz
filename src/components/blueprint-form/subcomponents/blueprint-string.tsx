@@ -90,7 +90,7 @@ export const BlueprintString = ({
             />
           </FormControl>
           <FormMessage />
-          <BlueprintGlance blueprintData={blueprintData} />
+          <BlueprintGlance hideSwap blueprintData={blueprintData} />
         </FormItem>
       )}
     />

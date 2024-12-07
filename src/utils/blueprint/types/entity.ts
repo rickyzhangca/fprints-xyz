@@ -12,6 +12,14 @@ import { speakerParameterSchema } from '@/utils/blueprint/types/speaker-paramete
 import { tagSchema } from '@/utils/blueprint/types/tag';
 import { z } from 'zod';
 
+export const itemsSchemaV1 = z.record(z.string(), z.number().int());
+export const itemsSchemaV2 = z.array(
+  z.object({
+    id: signalIdSchema,
+    items: z.record(z.string(), z.array(z.any())),
+  })
+);
+
 export const entitySchema = z.object({
   entity_number: z.number().int().positive(),
   name: z.string().optional(),
@@ -22,18 +30,7 @@ export const entitySchema = z.object({
   connections: connectionSchema.optional(),
   neighbours: z.array(z.number().int().positive()).optional(),
   control_behavior: controlBehaviorSchema.optional(),
-  items: z
-    .union([
-      z.record(z.string(), z.number().int()),
-      // 2.x change
-      z.array(
-        z.object({
-          id: signalIdSchema,
-          items: z.record(z.string(), z.array(z.any())),
-        })
-      )
-    ])
-    .optional(),
+  items: z.union([itemsSchemaV1, itemsSchemaV2]).optional(),
   recipe: z.string().optional(),
   bar: z.number().int().optional(),
   ammo_inventory: inventorySchema.optional(),

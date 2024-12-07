@@ -1,4 +1,10 @@
-import { Button, type ButtonProps } from '@/ui';
+import {
+  Button,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  type ButtonProps,
+} from '@/ui';
 import { CheckIcon, CopyIcon } from 'lucide-react';
 import { useState } from 'react';
 
@@ -6,6 +12,7 @@ type CopyButtonProps = {
   content: string;
   hideText?: boolean;
   variant?: ButtonProps['variant'];
+  beforeCopy?: (content: string) => string;
   onCopy?: () => void;
   umamiEvent: string;
   className?: string;
@@ -13,6 +20,7 @@ type CopyButtonProps = {
 
 export const CopyButton = ({
   content,
+  beforeCopy,
   onCopy,
   variant,
   hideText,
@@ -24,7 +32,8 @@ export const CopyButton = ({
   const handleCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      navigator.clipboard.writeText(content);
+      if (beforeCopy) navigator.clipboard.writeText(beforeCopy(content));
+      else navigator.clipboard.writeText(content);
       onCopy?.();
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -33,7 +42,7 @@ export const CopyButton = ({
     }
   };
 
-  return (
+  const button = (
     <Button
       data-umami-event={umamiEvent}
       variant={variant}
@@ -81,4 +90,18 @@ export const CopyButton = ({
       )}
     </Button>
   );
+
+  if (hideText) {
+    return (
+      <Tooltip delayDuration={750}>
+        <TooltipTrigger onClick={e => e.preventDefault()}>
+          {button}
+        </TooltipTrigger>
+        <TooltipContent onPointerDownOutside={e => e.preventDefault()}>
+          {copied ? 'Copied!' : 'Copy to clipboard'}
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+  return button;
 };

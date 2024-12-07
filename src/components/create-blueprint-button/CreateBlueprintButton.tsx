@@ -20,7 +20,13 @@ export type FormType =
   | 'import-factorio-school'
   | 'import-factorio-bin';
 
-export const CreateBlueprintButton = () => {
+type CreateBlueprintButtonProps = {
+  label?: string;
+};
+
+export const CreateBlueprintButton = ({
+  label,
+}: CreateBlueprintButtonProps) => {
   const [formType, setFormType] = useState<FormType | null>(null);
   const [initialBlueprintFormValues, setInitialBlueprintFormValues] =
     useState<ICreateBlueprintFormInitialValues>({
@@ -42,7 +48,7 @@ export const CreateBlueprintButton = () => {
 
   return (
     <div className="flex">
-      <CreateButton onSubmit={() => setFormType('create')} />
+      <CreateButton label={label} onSubmit={() => setFormType('create')} />
       <ImportButton onSubmit={setFormType} />
       {/* overlay has a bug of not restoring scrolling after dialog closed */}
       {/* so doing it manually */}

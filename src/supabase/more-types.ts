@@ -12,6 +12,11 @@ export type IProfile = Database['public']['Tables']['user_profiles']['Row'];
 
 export type ICollection = Database['public']['Tables']['collections']['Row'];
 
+export type ICollectionWithBlueprintCount =
+  Database['public']['Tables']['collections']['Row'] & {
+    blueprint_count: { count: number };
+  };
+
 export type ITag = Database['public']['Tables']['tags']['Row'];
 
 export const SupabaseEdgeFunctions = {

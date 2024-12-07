@@ -13,7 +13,7 @@ import { BugIcon } from 'lucide-react';
 import { NuqsAdapter } from 'nuqs/adapters/react-router';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { HelmetProvider } from 'react-helmet-async';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import {
   createBrowserRouter,
   Navigate,
@@ -122,6 +122,30 @@ createRoot(document.getElementById('root')!).render(
     <StoreProvider>
       <QueryClientProvider client={queryClient}>
         <HelmetProvider>
+          <Helmet>
+            <title>Fprints - Factorio Blueprint Sharing</title>
+            <meta
+              name="description"
+              content="Fprints - Share, discover, and search Factorio blueprints. Browse community blueprints for factories, layouts, and automation designs. Factory must grow!"
+            />
+            <meta
+              name="keywords"
+              content="factorio, blueprints, blueprint books, design, layout, automation, gaming, reddit"
+            />
+            <meta
+              property="og:title"
+              content="Fprints - Factorio Blueprint Sharing"
+            />
+            <meta
+              property="og:description"
+              content="Share, discover, and search Factorio blueprints from the community"
+            />
+            <meta
+              property="og:image"
+              content="https://fprints-asset.b-cdn.net/og/og.webp"
+            />
+            <meta property="og:url" content="https://fprints.xyz" />
+          </Helmet>
           <NuqsAdapter>
             <TooltipProvider delayDuration={0} skipDelayDuration={0}>
               <RouterProvider router={router} />

@@ -1,5 +1,10 @@
 import { useBearStore } from '@/store';
-import type { Database, IBlueprint, ICollection } from '@/supabase';
+import type {
+  Database,
+  IBlueprint,
+  ICollection,
+  ICollectionWithBlueprintCount,
+} from '@/supabase';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const useGetCollections = () => {
@@ -11,11 +16,16 @@ export const useGetCollections = () => {
     queryFn: async () => {
       const { data, error } = await supabase!
         .from('collections')
-        .select('*')
+        .select(
+          `
+          *,
+          blueprint_count:collection_blueprints(count)
+        `
+        )
         .eq('user_id', session!.user.id);
 
       if (error) throw error;
-      return data as ICollection[];
+      return data as ICollectionWithBlueprintCount[];
     },
     enabled: !!session?.user.id,
   });

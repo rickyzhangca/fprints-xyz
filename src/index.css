@@ -13,9 +13,6 @@ html {
   @apply scrollbar;
   @apply scrollbar-track-steel-950;
   @apply scrollbar-thumb-steel-400;
-  @screen sm {
-    scrollbar-gutter: stable;
-  }
 }
 
 ::selection:not(.w-md-editor *) {

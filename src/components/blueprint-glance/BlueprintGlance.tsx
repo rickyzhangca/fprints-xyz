@@ -12,11 +12,13 @@ import {
   AccordionTrigger,
 } from '@/ui';
 import { CopyButton } from '../copy-button';
+import { SwapBlueprintButton } from '../swap-blueprint-button';
 
 const _BlueprintGlance = ({
   isChild,
   blueprintData,
   onCopy,
+  hideSwap,
 }: BlueprintGlanceProps) => {
   const type = BlueprintUtils.Analysis.getBlueprintType(blueprintData);
 
@@ -47,14 +49,17 @@ const _BlueprintGlance = ({
           <BlueprintWrapperIcon data={blueprintData} />
           {label ?? 'Untitled'}
         </div>
-        <CopyButton
-          hideText
-          variant="headless"
-          content={encodedString}
-          onCopy={onCopy}
-          umamiEvent="copied-blueprint"
-          className="ml-2 p-2 opacity-40 transition duration-75 hover:opacity-100"
-        />
+        <div className="flex items-center">
+          {!hideSwap && <SwapBlueprintButton blueprintData={blueprintData} />}
+          <CopyButton
+            hideText
+            variant="headless"
+            content={encodedString}
+            onCopy={onCopy}
+            umamiEvent="copied-blueprint"
+            className="p-2 opacity-40 transition duration-75 hover:opacity-100"
+          />
+        </div>
       </div>
       {type === 'blueprint' && <BlueprintComponents data={blueprintData} />}
       {type === 'upgrade_planner' && (
@@ -68,6 +73,7 @@ const _BlueprintGlance = ({
 };
 
 type BlueprintGlanceProps = {
+  hideSwap?: boolean;
   isChild?: boolean;
   onCopy?: () => void;
   blueprintData: IBlueprintWrapper;
@@ -77,6 +83,7 @@ export const BlueprintGlance = ({
   blueprintData,
   isChild,
   onCopy,
+  hideSwap,
 }: BlueprintGlanceProps) => {
   if (Object.keys(blueprintData).length === 0) return null;
 
@@ -108,20 +115,26 @@ export const BlueprintGlance = ({
                 <BlueprintWrapperIcon data={blueprintData} />
                 {label}
               </div>
-              <CopyButton
-                hideText
-                variant="headless"
-                content={encodedString}
-                onCopy={onCopy}
-                umamiEvent="copied-blueprint-book"
-                className="ml-2 p-2 opacity-40 transition duration-75 hover:opacity-100"
-              />
+              <div className="flex items-center">
+                {!hideSwap && (
+                  <SwapBlueprintButton blueprintData={blueprintData} />
+                )}
+                <CopyButton
+                  hideText
+                  variant="headless"
+                  content={encodedString}
+                  onCopy={onCopy}
+                  umamiEvent="copied-blueprint-book"
+                  className="p-2 opacity-40 transition duration-75 hover:opacity-100"
+                />
+              </div>
             </div>
           </AccordionTrigger>
           <AccordionContent className="flex flex-col gap-1">
             {book.blueprints.map((blueprint, i) => (
               <BlueprintGlance
                 key={i}
+                hideSwap={hideSwap}
                 blueprintData={blueprint}
                 isChild
                 onCopy={onCopy}
@@ -135,6 +148,7 @@ export const BlueprintGlance = ({
 
   return (
     <_BlueprintGlance
+      hideSwap={hideSwap}
       isChild={isChild}
       blueprintData={blueprintData}
       onCopy={onCopy}

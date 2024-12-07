@@ -11,6 +11,7 @@ export * from './input';
 export * from './pagination';
 export * from './popover';
 export * from './scroll-area';
+export * from './sheet';
 export * from './tab';
 export * from './tag';
 export * from './textarea';

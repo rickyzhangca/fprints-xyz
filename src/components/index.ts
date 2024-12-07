@@ -12,6 +12,7 @@ export * from './header';
 export * from './like-button';
 export * from './nav';
 export * from './profile-pic';
+export * from './swap-blueprint-button';
 export * from './tabs';
 export * from './tag-combobox';
 export * from './user-dialog';

@@ -1,4 +1,4 @@
-import type { Database, ICollection, IProfile } from '@/supabase';
+import type { Database, ICollectionWithBlueprintCount, IProfile } from '@/supabase';
 import { supabase } from '@/supabase';
 import { Session, SupabaseClient, User } from '@supabase/supabase-js';
 import isMobile from 'is-mobile';
@@ -21,14 +21,16 @@ export interface BearState extends PersistedState {
   session: Session | null;
   user: User | null;
   profile: IProfile | null;
-  collections: ICollection[] | null;
+  collections: ICollectionWithBlueprintCount[] | null;
   columns: number;
   likesHistory: LikeHistory[];
   blueprintCardsPerPage: number;
   setSession: (session: Session | null) => void;
   setUser: (user: User | null) => void;
   setProfile: (profile: IProfile | null) => void;
-  setCollections: (collections: ICollection[] | null) => void;
+  setCollections: (
+    collections: ICollectionWithBlueprintCount[] | null
+  ) => void;
   setSort: (sort: Sort) => void;
   setView: (view: 'modern' | 'classic') => void;
   setColumns: (columns: number) => void;

@@ -1,5 +1,5 @@
 import { useBearStore } from '@/store';
-import { IProfile } from '@/supabase';
+import { ICollectionWithBlueprintCount, IProfile } from '@/supabase';
 import { getRandomBackground } from '@/utils/color';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -91,10 +91,52 @@ export const useCreateProfile = () => {
       if (newCollection.error || myCollections.error) throw new Error();
 
       setProfile(newProfile.data);
-      setCollections(myCollections.data);
+      setCollections(myCollections.data as ICollectionWithBlueprintCount[]);
 
       navigate('/');
       return newProfile.data as IProfile;
     },
+  });
+};
+
+export const useGetMyPrintsCount = () => {
+  const supabase = useBearStore(state => state.supabase);
+  const session = useBearStore(state => state.session);
+
+  return useQuery({
+    queryKey: ['get-my-prints-count', session?.user.id],
+    queryFn: async () => {
+      if (!session?.user.id) throw new Error('User not found');
+      const { count, error } = await supabase!
+        .from('blueprints')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', session.user.id);
+
+      if (error) throw error;
+      return count;
+    },
+    enabled: !!session?.user.id,
+  });
+};
+
+export const useRPCStats = (enabled: boolean) => {
+  const supabase = useBearStore(state => state.supabase);
+  const session = useBearStore(state => state.session);
+
+  return useQuery({
+    queryKey: ['get-user-stats', session?.user.id],
+    queryFn: async () => {
+      if (!session?.user.id) throw new Error('User not found');
+      const { data, error } = await supabase.rpc('get_user_blueprint_stats', {
+        user_id: session.user.id,
+      });
+      if (error) throw error;
+      return data as {
+        total_likes: number;
+        total_copies: number;
+        total_collections: number;
+      };
+    },
+    enabled,
   });
 };

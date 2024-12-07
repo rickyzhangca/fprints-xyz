@@ -679,6 +679,12 @@ export type Database = {
       }
     }
     Functions: {
+      get_user_blueprint_stats: {
+        Args: {
+          user_id: string
+        }
+        Returns: Json
+      }
       increment_blueprint_copy_count: {
         Args: {
           blueprint_id: string

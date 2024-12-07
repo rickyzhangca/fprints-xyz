@@ -1,9 +1,11 @@
-import { IBlueprintWrapper } from '@/utils';
+import { IBlueprintWrapper, itemsSchemaV1, itemsSchemaV2 } from '@/utils';
 import { getBlueprintType } from '@/utils/blueprint/get-type';
+import { z } from 'zod';
 
 export const getComponents = (
   blueprint: IBlueprintWrapper,
-  components: string[] = []
+  components: string[] = [],
+  checkItems = true
 ): string[] => {
   const type = getBlueprintType(blueprint);
 
@@ -18,6 +20,27 @@ export const getComponents = (
       blueprint.blueprint?.tiles
         ?.map(tile => tile.name)
         .filter((name): name is string => !!name) ?? [];
+    // Get item names
+    const allItems = blueprint.blueprint?.entities
+      ?.map(entity => entity.items)
+      .filter(Boolean);
+    // Get item names from entities
+    if (checkItems && allItems) {
+      allItems.forEach(items => {
+        if (itemsSchemaV1.safeParse(items).success) {
+          components.push(
+            ...Object.keys(items as unknown as z.infer<typeof itemsSchemaV1>)
+          );
+        } else if (itemsSchemaV2.safeParse(items).success) {
+          components.push(
+            ...(items as unknown as z.infer<typeof itemsSchemaV2>).flatMap(
+              item => item.id.name
+            )
+          );
+        }
+      });
+    }
+
     // Combine and add to components array
     components.push(...entityNames, ...tileNames);
   }
@@ -27,18 +50,27 @@ export const getComponents = (
     // ignore the index
     blueprint.blueprint_book?.blueprints.forEach((item: IBlueprintWrapper) => {
       if (item.blueprint) {
-        getComponents({ blueprint: item.blueprint }, components);
+        getComponents({ blueprint: item.blueprint }, components, checkItems);
       }
       if (item.blueprint_book) {
-        getComponents({ blueprint_book: item.blueprint_book }, components);
+        getComponents(
+          { blueprint_book: item.blueprint_book },
+          components,
+          checkItems
+        );
       }
       if (item.upgrade_planner) {
-        getComponents({ upgrade_planner: item.upgrade_planner }, components);
+        getComponents(
+          { upgrade_planner: item.upgrade_planner },
+          components,
+          checkItems
+        );
       }
       if (item.deconstruction_planner) {
         getComponents(
           { deconstruction_planner: item.deconstruction_planner },
-          components
+          components,
+          checkItems
         );
       }
     });

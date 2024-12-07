@@ -74,10 +74,12 @@ export const BlueprintForm = ({
 
   useEffect(() => {
     form.reset(initialValues);
-  }, [initialValues, form]);
+  }, [initialValues]);
 
   const isPending =
-    bunnyUpload.isPending || createBlueprint.isPending || updateBlueprint.isPending;
+    bunnyUpload.isPending ||
+    createBlueprint.isPending ||
+    updateBlueprint.isPending;
 
   const onSubmit = async (values: ICreateBlueprintFormValues) => {
     let url = '';
@@ -213,8 +215,7 @@ export const BlueprintForm = ({
             type="button"
             // for some reason, type="submit" doesn't work here
             onClick={() => onSubmit(form.getValues())}
-            disabled={isPending
-            }
+            disabled={isPending}
           >
             {mode === 'create'
               ? isPending

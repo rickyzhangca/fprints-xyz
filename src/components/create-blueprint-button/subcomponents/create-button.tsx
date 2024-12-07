@@ -2,12 +2,18 @@ import { useBearStore } from '@/store';
 import { Button } from '@/ui';
 import { LockIcon, PlusIcon } from 'lucide-react';
 
-export const CreateButton = ({ onSubmit }: { onSubmit: () => void }) => {
+export const CreateButton = ({
+  label,
+  onSubmit,
+}: {
+  label?: string;
+  onSubmit: () => void;
+}) => {
   const session = useBearStore(state => state.session);
 
   return (
     <Button
-      className="rounded-r-none"
+      className="w-full rounded-r-none"
       disabled={!session}
       leftIcon={
         !session ? (
@@ -18,7 +24,7 @@ export const CreateButton = ({ onSubmit }: { onSubmit: () => void }) => {
       }
       onClick={onSubmit}
     >
-      Create
+      {label ?? 'Create'}
     </Button>
   );
 };

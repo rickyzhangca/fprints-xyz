@@ -58,6 +58,7 @@ export const LikeButton = ({ variant, blueprint }: LikeButtonProps) => {
             : 'hover:text-steel-50'
         )}
         onClick={handleClick}
+        data-umami-event={shouldHighlight ? 'unliked' : 'liked'}
       >
         <HeartIcon
           size={14}
@@ -85,6 +86,7 @@ export const LikeButton = ({ variant, blueprint }: LikeButtonProps) => {
       }
       onClick={handleClick}
       className="min-w-[60px]"
+      data-umami-event={shouldHighlight ? 'unliked' : 'liked'}
     >
       {likeCount}
     </Button>

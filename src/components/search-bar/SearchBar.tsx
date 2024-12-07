@@ -260,6 +260,7 @@ export const SearchBar = () => {
                       setExcludeTagIds([]);
                       setIncludeComponents([]);
                       setExcludeComponents([]);
+                      setQuickFilterValue('');
                     }}
                   >
                     Clear all

@@ -10,7 +10,7 @@ export const Controls = ({ blueprint }: { blueprint: IBlueprintDetails }) => {
   const rpcCopy = useRPCCopy();
 
   return (
-    <div className="flex w-full min-w-0 items-center justify-between gap-3 border-t border-steel-800 bg-steel-900 p-3 md:p-6">
+    <div className="flex w-full min-w-0 items-center justify-between gap-3 border-t border-steel-800 bg-steel-900 p-3 md:p-4">
       <div className="flex min-w-0 items-center gap-2">
         <CopyButton
           content={blueprint.blueprint_string ?? ''}

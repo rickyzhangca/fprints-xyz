@@ -124,7 +124,7 @@ export const BlueprintDialog = () => {
               loading="eager"
             />
           </div>
-          <article className="flex min-w-[320px] flex-col md:min-w-[360px] md:max-w-[50%] xl:min-w-[480px]">
+          <article className="flex min-w-[320px] flex-col md:min-w-[360px] md:max-w-[50%] lg:max-w-[40%] xl:min-w-[480px]">
             <div className="flex flex-1 flex-col items-start gap-6 overflow-hidden p-6 scrollbar scrollbar-track-steel-950 scrollbar-thumb-steel-500 md:overflow-auto lg:px-8 lg:pt-8">
               <h1 className="group relative text-2xl font-bold text-steel-50 2xl:text-2xl">
                 {blueprint.title}
@@ -143,7 +143,7 @@ export const BlueprintDialog = () => {
                   />
                 </button>
               </h1>
-              <div className="prose prose-invert">
+              <div className="prose prose-invert w-full max-w-full">
                 {blueprint.description && (
                   <Suspense fallback={<div>Loading description...</div>}>
                     <section aria-label="Blueprint description">
@@ -153,7 +153,7 @@ export const BlueprintDialog = () => {
                           {
                             '--color-border-muted': '#474747',
                             '--color-border-default': '#333',
-                            '--color-canvas-default': 'transparent',
+                            '--color-canvas-default': '#313031',
                             '--color-fg-default': '#e7e6e7',
                           } as React.CSSProperties
                         }
@@ -165,7 +165,7 @@ export const BlueprintDialog = () => {
                   </Suspense>
                 )}
               </div>
-              {parseBlueprintString.data ? (
+              {parseBlueprintString.data && (
                 <section
                   className="flex w-full flex-col gap-2"
                   aria-label="Components"
@@ -178,7 +178,8 @@ export const BlueprintDialog = () => {
                     }
                   />
                 </section>
-              ) : (
+              )}
+              {parseBlueprintString.isPending && (
                 <div className="flex w-full items-center justify-center px-2 py-4 text-steel-500">
                   Loading...
                 </div>

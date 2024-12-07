@@ -11,7 +11,9 @@ import { getComponents } from '@/utils/blueprint/get-components';
 import { getGameVersion } from '@/utils/blueprint/get-game-version';
 import { getBlueprintType } from '@/utils/blueprint/get-type';
 import { recommendTags } from '@/utils/blueprint/recommend-tags';
+import { swap } from '@/utils/blueprint/swap';
 import { validateJson } from '@/utils/blueprint/validate-json';
+import { getSwappableMap } from './get-swappable-map';
 
 export const BlueprintUtils = {
   Analysis: {
@@ -27,8 +29,11 @@ export const BlueprintUtils = {
     encodeBase64String,
     decodeBase64String,
   },
+  Swapping: {
+    getSwappableMap,
+    swap,
+  },
 };
 
 export * from './types';
 export type { ComponentCounts };
-
