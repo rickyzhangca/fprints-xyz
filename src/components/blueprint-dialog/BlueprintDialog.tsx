@@ -95,7 +95,7 @@ export const BlueprintDialog = () => {
       <Helmet blueprint={blueprint} />
       <DialogContent
         className={tw(
-          'flex h-screen max-h-screen w-screen max-w-[1920px] flex-col gap-0 overflow-hidden rounded-none bg-steel-950 p-0 shadow-2xl sm:h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-4rem)] sm:w-[calc(100vw-2rem)] sm:rounded-xl md:h-[calc(100vh-6rem)] md:rounded-3xl xl:w-[calc(100vw-8rem)] 2xl:w-[calc(100vw-12rem)] 3xl:w-[calc(100vw-16rem)]',
+          'flex h-dvh max-h-dvh w-screen max-w-[1920px] flex-col gap-0 overflow-hidden rounded-none bg-steel-950 p-0 shadow-2xl sm:h-[calc(100dvh-2rem)] sm:max-h-[calc(100dvh-4rem)] sm:w-[calc(100vw-2rem)] sm:rounded-xl md:h-[calc(100dvh-6rem)] md:rounded-3xl xl:w-[calc(100vw-8rem)] 2xl:w-[calc(100vw-12rem)] 3xl:w-[calc(100vw-16rem)]',
           isEditing && 'hidden'
         )}
         aria-labelledby="blueprint-title"

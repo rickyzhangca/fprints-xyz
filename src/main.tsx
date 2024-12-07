@@ -123,7 +123,7 @@ createRoot(document.getElementById('root')!).render(
       <QueryClientProvider client={queryClient}>
         <HelmetProvider>
           <Helmet>
-            <title>Fprints - Factorio Blueprint Sharing</title>
+            <title>Fprints | Factorio Blueprints</title>
             <meta
               name="description"
               content="Fprints - Share, discover, and search Factorio blueprints. Browse community blueprints for factories, layouts, and automation designs. Factory must grow!"
@@ -132,10 +132,7 @@ createRoot(document.getElementById('root')!).render(
               name="keywords"
               content="factorio, blueprints, blueprint books, design, layout, automation, gaming, reddit"
             />
-            <meta
-              property="og:title"
-              content="Fprints - Factorio Blueprint Sharing"
-            />
+            <meta property="og:title" content="Fprints | Factorio Blueprints" />
             <meta
               property="og:description"
               content="Share, discover, and search Factorio blueprints from the community"

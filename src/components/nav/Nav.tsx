@@ -22,7 +22,7 @@ const MyLikes = () => {
       <Link to="/liked" className="h-full">
         <TabsTrigger value="liked" className="gap-2">
           Liked
-          {getLikesCount.data && (
+          {getLikesCount.data && getLikesCount.data > 0 && (
             <p className="text-steel-500">{getLikesCount.data}</p>
           )}
         </TabsTrigger>
@@ -50,7 +50,7 @@ const Collections = () => {
         >
           <TabsTrigger value={c.id} className="gap-2">
             {c.title}
-            {c.blueprint_count.count && (
+            {c.blueprint_count.count && c.blueprint_count.count > 0 && (
               <p className="text-steel-500">{c.blueprint_count.count}</p>
             )}
           </TabsTrigger>
@@ -68,7 +68,7 @@ const MyPrints = () => {
       <Link to="/my-blueprints" className="h-full">
         <TabsTrigger value="my-blueprints" className="gap-2">
           My prints
-          {getMyPrintsCount.data && (
+          {getMyPrintsCount.data && getMyPrintsCount.data > 0 && (
             <p className="text-steel-500">{getMyPrintsCount.data}</p>
           )}
         </TabsTrigger>

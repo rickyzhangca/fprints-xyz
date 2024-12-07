@@ -35,7 +35,10 @@ export const QuickFilters = ({
     >
       {Object.entries(options).map(([value, option]) => (
         <Tooltip key={value}>
-          <TooltipTrigger data-umami-event={`quick-filter-${value}`}>
+          <TooltipTrigger
+            type="button"
+            data-umami-event={`quick-filter-${value}`}
+          >
             <ToggleGroupItem value={value}>{option.children}</ToggleGroupItem>
           </TooltipTrigger>
           <TooltipContent>

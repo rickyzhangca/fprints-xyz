@@ -87,7 +87,7 @@ export const TagCombobox = ({
             {getTags.data?.find(tag => tag.id === id)?.name}
             {i > 0 && (
               <Tooltip delayDuration={500}>
-                <TooltipTrigger>
+                <TooltipTrigger type="button">
                   <ChevronsLeftIcon
                     className="ml-0.5 size-4 shrink-0 hover:cursor-pointer"
                     onClick={e => {

@@ -65,7 +65,10 @@ export const Tags = ({
                     <div className="flex select-none items-center gap-1">
                       {tag.name}
                       <Tooltip delayDuration={500}>
-                        <TooltipTrigger>
+                        <TooltipTrigger
+                          type="button"
+                          data-umami-event="add-suggested-tag"
+                        >
                           <ArrowUpIcon
                             className="size-4 shrink-0 hover:cursor-pointer"
                             onClick={() => {

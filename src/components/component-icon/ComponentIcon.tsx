@@ -36,7 +36,7 @@ export const ComponentIcon = ({
   if (url)
     return (
       <Tooltip delayDuration={500}>
-        <TooltipTrigger asChild className="shrink-0">
+        <TooltipTrigger type="button" asChild className="shrink-0">
           {button}
         </TooltipTrigger>
         <TooltipContent>{component}</TooltipContent>

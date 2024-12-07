@@ -94,7 +94,7 @@ export const CopyButton = ({
   if (hideText) {
     return (
       <Tooltip delayDuration={750}>
-        <TooltipTrigger onClick={e => e.preventDefault()}>
+        <TooltipTrigger type="button" onClick={e => e.preventDefault()}>
           {button}
         </TooltipTrigger>
         <TooltipContent onPointerDownOutside={e => e.preventDefault()}>

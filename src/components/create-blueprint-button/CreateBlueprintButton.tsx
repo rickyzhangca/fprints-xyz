@@ -53,7 +53,7 @@ export const CreateBlueprintButton = ({
       {/* overlay has a bug of not restoring scrolling after dialog closed */}
       {/* so doing it manually */}
       {!!formType && (
-        <div className="fixed inset-0 z-40 h-screen w-screen bg-black/10 backdrop-blur-sm duration-200 animate-in fade-in-0" />
+        <div className="fixed inset-0 z-40 h-dvh w-screen bg-black/10 backdrop-blur-sm duration-200 animate-in fade-in-0" />
       )}
       <Dialog open={!!formType} onOpenChange={() => setFormType(null)}>
         <DialogContent className={tw(formType === 'create' && 'max-w-2xl')}>
