@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /new-profile
+Disallow: /collection
+Sitemap: https://fprints.art/sitemap.xml

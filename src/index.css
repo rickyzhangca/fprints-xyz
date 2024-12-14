@@ -39,6 +39,7 @@ html {
 .w-md-editor-text-input,
 .w-md-editor-text-pre {
   @apply placeholder:!text-steel-400;
+  @apply !text-steel-950;
 }
 
 .w-md-editor-text-pre,
