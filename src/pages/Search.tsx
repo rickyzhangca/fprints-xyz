@@ -1,7 +1,6 @@
-import { BlueprintCard } from '@/components';
+import { BlueprintCard, Paginate } from '@/components';
 import { SearchResults, useSearchBlueprints } from '@/hooks/search';
 import { useBearStore } from '@/store';
-import { getPagination } from '@/utils';
 import { CheckIcon } from 'lucide-react';
 import {
   parseAsArrayOf,
@@ -91,7 +90,7 @@ export const Search = () => {
           <BlueprintCard key={b.id} blueprint={b} />
         ))}
       </Masonry>
-      {getPagination(searchResults?.totalCount ?? 1)}
+      <Paginate count={searchResults?.totalCount ?? 0} />
       <Outlet />
     </>
   );

@@ -15,7 +15,9 @@ export const MyPrintsTab = () => {
     getMyBlueprints.data?.filter(b => !b.is_public).length ===
     getMyBlueprints.data?.length;
 
-  const rpcStats = useRPCStats(!onlyHasPrivateBlueprints && !!session?.user.id);
+  const rpcStats = useRPCStats(
+    !onlyHasPrivateBlueprints && !!session?.user?.id
+  );
 
   return (
     <>
@@ -31,8 +33,8 @@ export const MyPrintsTab = () => {
                   Got your first blueprint to share?
                 </div>
                 <div className="text-sm text-steel-400">
-                  We've all been stuck on a build before. Your hack might be
-                  exactly what someone needs.
+                  We&apos;ve all been stuck on a build before. Your hack might
+                  be exactly what someone needs.
                 </div>
                 <div className="text-sm text-steel-400">
                   Watch the likes and copies stack up as other engineers put

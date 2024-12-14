@@ -142,6 +142,7 @@ createRoot(document.getElementById('root')!).render(
               content="https://fprints-asset.b-cdn.net/og/og.webp"
             />
             <meta property="og:url" content="https://fprints.xyz" />
+            <link rel="canonical" href="https://fprints.xyz" />
           </Helmet>
           <NuqsAdapter>
             <TooltipProvider delayDuration={0} skipDelayDuration={0}>

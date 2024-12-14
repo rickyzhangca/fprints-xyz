@@ -46,6 +46,10 @@ export const Helmet = ({ blueprint }: { blueprint: IBlueprintDetails }) => {
         name="keywords"
         content={`factorio,blueprint${blueprint.tags?.length ? ',' + blueprint.tags.map(tag => (tag as { name: string }).name).join(',') : ''}`}
       />
+      <link
+        rel="canonical"
+        href={`https://fprints.xyz/blueprint/${blueprint.id}`}
+      />
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
       </script>

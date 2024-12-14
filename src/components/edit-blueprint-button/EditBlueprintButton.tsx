@@ -31,6 +31,8 @@ export const EditBlueprintButton = ({
       image_url: blueprintData.image_url ?? '',
       description: blueprintData.description ?? '',
       is_public: blueprintData.is_public ?? true,
+      remixed_from_url: blueprintData.remixed_from_url ?? '',
+      remixed_from_title: blueprintData.remixed_from_title ?? '',
     }),
     [blueprintData]
   );

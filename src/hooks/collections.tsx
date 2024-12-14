@@ -12,9 +12,9 @@ export const useGetCollections = () => {
   const session = useBearStore(state => state.session);
 
   return useQuery({
-    queryKey: ['get-user-collections', session?.user.id],
+    queryKey: ['get-user-collections', session?.user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase!
+      const { data, error } = await supabase
         .from('collections')
         .select(
           `
@@ -22,12 +22,12 @@ export const useGetCollections = () => {
           blueprint_count:collection_blueprints(count)
         `
         )
-        .eq('user_id', session!.user.id);
+        .eq('user_id', session?.user?.id ?? '');
 
       if (error) throw error;
       return data as ICollectionWithBlueprintCount[];
     },
-    enabled: !!session?.user.id,
+    enabled: !!session?.user?.id,
   });
 };
 
@@ -39,7 +39,7 @@ export const useGetBlueprintsByCollection = (collectionId: string) => {
   >({
     queryKey: ['get-blueprints-by-collection', collectionId],
     queryFn: async () => {
-      const { data } = await supabase!
+      const { data } = await supabase
         .from('collection_blueprint_cards')
         .select('*')
         .eq('collection_id', collectionId);
@@ -61,7 +61,7 @@ export const useAddBlueprintToCollection = () => {
       blueprintId: IBlueprint['id'];
       collectionId: ICollection['id'];
     }) => {
-      const { error } = await supabase!
+      const { error } = await supabase
         .from('collection_blueprints')
         .insert({ blueprint_id: blueprintId, collection_id: collectionId });
       if (error) throw error;
@@ -80,7 +80,7 @@ export const useRemoveBlueprintFromCollection = () => {
       blueprintId: IBlueprint['id'];
       collectionId: ICollection['id'];
     }) => {
-      const { error } = await supabase!
+      const { error } = await supabase
         .from('collection_blueprints')
         .delete()
         .eq('blueprint_id', blueprintId)

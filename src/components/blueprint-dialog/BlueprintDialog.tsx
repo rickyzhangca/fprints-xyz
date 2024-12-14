@@ -31,6 +31,7 @@ import { Link2Icon, RadiationIcon, XIcon } from 'lucide-react';
 import { lazy, Suspense, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Copied } from './subcomponents/copied';
+import { Remix } from './subcomponents/remix';
 
 const MarkdownPreview = lazy(() =>
   import('@uiw/react-md-editor').then(mdx => ({
@@ -126,7 +127,7 @@ export const BlueprintDialog = () => {
           </div>
           <article className="flex min-w-[320px] flex-col md:min-w-[360px] md:max-w-[50%] lg:max-w-[40%] xl:min-w-[480px]">
             <div className="flex flex-1 flex-col items-start gap-6 overflow-hidden p-6 scrollbar scrollbar-track-steel-950 scrollbar-thumb-steel-500 md:overflow-auto lg:px-8 lg:pt-8">
-              <h1 className="group relative text-2xl font-bold text-steel-50 2xl:text-2xl">
+              <h2 className="group relative text-2xl font-bold text-steel-50 2xl:text-2xl">
                 {blueprint.title}
                 <button
                   className="absolute -left-7 top-0 hidden p-1.5 text-steel-300 transition-colors duration-75 group-hover:block hover:text-steel-50 active:text-steel-300 lg:-left-8"
@@ -142,7 +143,7 @@ export const BlueprintDialog = () => {
                     strokeWidth={1.5}
                   />
                 </button>
-              </h1>
+              </h2>
               <div className="prose prose-invert w-full max-w-full">
                 {blueprint.description && (
                   <Suspense fallback={<div>Loading description...</div>}>
@@ -184,6 +185,18 @@ export const BlueprintDialog = () => {
                   Loading...
                 </div>
               )}
+              {blueprint.remixed_from_url && (
+                <section
+                  className="flex w-full flex-col gap-2"
+                  aria-label="Blueprint remixed from"
+                >
+                  <h2 className="font-medium text-steel-300">Remixed from</h2>
+                  <Remix
+                    title={blueprint.remixed_from_title}
+                    url={blueprint.remixed_from_url}
+                  />
+                </section>
+              )}
               <section
                 className="flex flex-col gap-2"
                 aria-label="Blueprint tags"
@@ -191,7 +204,7 @@ export const BlueprintDialog = () => {
                 <h2 className="font-medium text-steel-300">Tags</h2>
                 <Tags tags={blueprint.tags} />
               </section>
-              {blueprint.user_id === session?.user.id && (
+              {blueprint.user_id === session?.user?.id && (
                 <div className="flex w-full items-center gap-2">
                   <EditBlueprintButton
                     open={isEditing}

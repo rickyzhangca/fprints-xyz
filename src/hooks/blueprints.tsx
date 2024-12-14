@@ -7,8 +7,9 @@ export const useGetBlueprintCardsCount = () => {
   return useQuery({
     queryKey: ['get-blueprint-cards-count'],
     queryFn: async () => {
-      const { count } = await supabase!.from('blueprint_card').select('*', {
+      const { count } = await supabase.from('blueprint_card').select('*', {
         count: 'exact',
+        head: true,
       });
       return count ?? 0;
     },
@@ -25,7 +26,7 @@ export const useGetAllBlueprints = (page: number) => {
   return useQuery<IBlueprintCard[]>({
     queryKey: ['get-all-blueprints', sort, page, blueprintCardsPerPage],
     queryFn: async () => {
-      const { data } = await supabase!
+      const { data } = await supabase
         .from('blueprint_card')
         .select('*')
         .eq('is_public', true)
@@ -109,9 +110,9 @@ export const useGetMyBlueprints = () => {
   const sort = useBearStore(state => state.sort);
 
   return useQuery({
-    queryKey: ['get-my-blueprints', session?.user.id, sort],
+    queryKey: ['get-my-blueprints', session?.user?.id, sort],
     queryFn: async () => {
-      const { data } = await supabase!
+      const { data } = await supabase
         .from('my_blueprint_cards')
         .select('*')
         .order(sort === 'Most recent' ? 'created_at' : 'like_count', {
@@ -119,7 +120,7 @@ export const useGetMyBlueprints = () => {
         });
       return data ?? [];
     },
-    enabled: !!session?.user.id,
+    enabled: !!session?.user?.id,
   });
 };
 
@@ -130,7 +131,7 @@ export const useGetBlueprintsByUserId = (userId: string) => {
   return useQuery({
     queryKey: ['get-blueprints-by-user-id', userId, sort],
     queryFn: async () => {
-      const { data } = await supabase!
+      const { data } = await supabase
         .from('blueprint_card')
         .select('*')
         .eq('user_id', userId)
@@ -149,9 +150,23 @@ export const useGetBlueprint = (blueprintId: string) => {
   return useQuery({
     queryKey: ['get-blueprint-details', blueprintId],
     queryFn: async () => {
-      const { data } = await supabase!
+      const { data } = await supabase
         .from('blueprint_details')
         .select('*')
+        .eq('id', blueprintId);
+      return data?.[0];
+    },
+  });
+};
+
+export const usePostGetBlueprintTitle = () => {
+  const supabase = useBearStore(state => state.supabase);
+
+  return useMutation({
+    mutationFn: async (blueprintId: string) => {
+      const { data } = await supabase
+        .from('blueprints')
+        .select('title')
         .eq('id', blueprintId);
       return data?.[0];
     },

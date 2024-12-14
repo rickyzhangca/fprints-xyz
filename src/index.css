@@ -20,12 +20,6 @@ html {
   @apply bg-black;
 }
 
-html body[data-scroll-locked] {
-  margin-right: 0 !important;
-  padding-right: 0 !important;
-  --removed-body-scroll-bar-size: 0px !important;
-}
-
 .w-md-editor {
   @apply !overflow-hidden;
   @apply !rounded-lg;

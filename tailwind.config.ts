@@ -8,6 +8,9 @@ const config: Config = {
   content: ['./index.html', './src/**/*.{ts,tsx,css}'],
   theme: {
     extend: {
+      zIndex: {
+        '60': '60',
+      },
       screens: {
         xl: '1280px',
         '2xl': '1536px',
@@ -57,12 +60,15 @@ const config: Config = {
       },
       boxShadow: {
         sm: '0 1px 2px 0 rgba(0, 0, 0, 0.15)',
-        DEFAULT: '0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 2px -1px rgba(0, 0, 0, 0.2)',
+        DEFAULT:
+          '0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 2px -1px rgba(0, 0, 0, 0.2)',
         md: '0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -2px rgba(0, 0, 0, 0.25)',
         lg: '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.3)',
         xl: '0 20px 25px -5px rgba(0, 0, 0, 0.35), 0 8px 10px -6px rgba(0, 0, 0, 0.35)',
         '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.4)',
         inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.15)',
+        'xl-top':
+          '0 -20px 25px 5px rgba(0, 0, 0, 0.35), 0 8px 10px -6px rgba(0, 0, 0, 0.35)',
       },
     },
   },

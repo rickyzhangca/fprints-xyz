@@ -54,7 +54,7 @@ export const useGetLikedBlueprints = (enabled: boolean) => {
   return useQuery({
     queryKey: ['get-my-liked-blueprints', sort],
     queryFn: async () => {
-      const { data } = await supabase!
+      const { data } = await supabase
         .from('my_liked_blueprint_cards')
         .select('*')
         .order(sort === 'Most recent' ? 'liked_at' : 'like_count', {
@@ -71,16 +71,16 @@ export const useGetLikesCount = () => {
   const session = useBearStore(state => state.session);
 
   return useQuery({
-    queryKey: ['get-user-likes-count', session?.user.id],
+    queryKey: ['get-user-likes-count', session?.user?.id],
     queryFn: async () => {
-      const { count, error } = await supabase!
+      const { count, error } = await supabase
         .from('likes')
         .select('*', { count: 'exact', head: true })
-        .eq('user_id', session!.user.id);
+        .eq('user_id', session?.user?.id ?? '');
 
       if (error) throw error;
       return count;
     },
-    enabled: !!session?.user.id,
+    enabled: !!session?.user?.id,
   });
 };

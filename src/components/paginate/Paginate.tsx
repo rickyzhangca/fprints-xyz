@@ -3,22 +3,38 @@ import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from '@/ui';
-
-import { PaginationItem } from '@/ui';
-
-import { PaginationLink } from '@/ui';
 import { parseAsInteger, useQueryState } from 'nuqs';
 
-export const getPagination = (count: number) => {
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1));
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+type PaginateProps = {
+  count: number;
+};
+
+export const Paginate = ({ count }: PaginateProps) => {
+  const [page, setPage] = useQueryState(
+    'page',
+    parseAsInteger.withDefault(1).withOptions({
+      history: 'push',
+    })
+  );
   const blueprintCardsPerPage = useBearStore(
     state => state.blueprintCardsPerPage
   );
   const columns = useBearStore(state => state.columns);
   const maxLookingWindow = Math.min(3, columns);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    scrollToTop();
+  };
 
   const totalPages = Math.ceil(count / blueprintCardsPerPage);
   if (totalPages <= 1) return;
@@ -27,7 +43,7 @@ export const getPagination = (count: number) => {
   if (page > 1) {
     items.push(
       <PaginationItem key="previous">
-        <PaginationPrevious onClick={() => setPage(page - 1)} />
+        <PaginationPrevious onClick={() => handlePageChange(page - 1)} />
       </PaginationItem>
     );
   }
@@ -35,7 +51,7 @@ export const getPagination = (count: number) => {
     items.push(
       <PaginationItem key="previous-ellipsis">
         <PaginationEllipsis
-          onClick={() => setPage(page - maxLookingWindow - 1)}
+          onClick={() => handlePageChange(page - maxLookingWindow - 1)}
         />
       </PaginationItem>
     );
@@ -44,7 +60,9 @@ export const getPagination = (count: number) => {
     if (i > 0 && i <= totalPages) {
       items.push(
         <PaginationItem key={i}>
-          <PaginationLink onClick={() => setPage(i)}>{i}</PaginationLink>
+          <PaginationLink onClick={() => handlePageChange(i)}>
+            {i}
+          </PaginationLink>
         </PaginationItem>
       );
     }
@@ -61,7 +79,7 @@ export const getPagination = (count: number) => {
   ) {
     items.push(
       <PaginationItem key={i}>
-        <PaginationLink onClick={() => setPage(i)}>{i}</PaginationLink>
+        <PaginationLink onClick={() => handlePageChange(i)}>{i}</PaginationLink>
       </PaginationItem>
     );
   }
@@ -69,7 +87,7 @@ export const getPagination = (count: number) => {
     items.push(
       <PaginationItem key="next-ellipsis">
         <PaginationEllipsis
-          onClick={() => setPage(page + maxLookingWindow + 1)}
+          onClick={() => handlePageChange(page + maxLookingWindow + 1)}
         />
       </PaginationItem>
     );
@@ -77,10 +95,11 @@ export const getPagination = (count: number) => {
   if (page < totalPages) {
     items.push(
       <PaginationItem key="next">
-        <PaginationNext onClick={() => setPage(page + 1)} />
+        <PaginationNext onClick={() => handlePageChange(page + 1)} />
       </PaginationItem>
     );
   }
+
   return (
     <Pagination>
       <PaginationContent>{items}</PaginationContent>

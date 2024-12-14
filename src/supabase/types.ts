@@ -116,17 +116,19 @@ export type Database = {
       }
       blueprints: {
         Row: {
+          _dep: string | null
           blueprint_string: string
           components: string[]
           copy_count: number
           created_at: string
           description: string
-          forked_from_id: string | null
           game_version: string
           id: string
           image_url: string
           is_public: boolean
           meta: string[]
+          remixed_from_title: string | null
+          remixed_from_url: string | null
           title: string
           title_description_tsv: unknown | null
           type: Database["public"]["Enums"]["type"]
@@ -134,17 +136,19 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          _dep?: string | null
           blueprint_string: string
           components?: string[]
           copy_count?: number
           created_at?: string
           description?: string
-          forked_from_id?: string | null
           game_version?: string
           id?: string
           image_url?: string
           is_public?: boolean
           meta?: string[]
+          remixed_from_title?: string | null
+          remixed_from_url?: string | null
           title: string
           title_description_tsv?: unknown | null
           type?: Database["public"]["Enums"]["type"]
@@ -152,17 +156,19 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          _dep?: string | null
           blueprint_string?: string
           components?: string[]
           copy_count?: number
           created_at?: string
           description?: string
-          forked_from_id?: string | null
           game_version?: string
           id?: string
           image_url?: string
           is_public?: boolean
           meta?: string[]
+          remixed_from_title?: string | null
+          remixed_from_url?: string | null
           title?: string
           title_description_tsv?: unknown | null
           type?: Database["public"]["Enums"]["type"]
@@ -171,43 +177,43 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
-            columns: ["forked_from_id"]
+            foreignKeyName: "blueprints__dep_fkey"
+            columns: ["_dep"]
             isOneToOne: false
             referencedRelation: "blueprint_card"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
-            columns: ["forked_from_id"]
+            foreignKeyName: "blueprints__dep_fkey"
+            columns: ["_dep"]
             isOneToOne: false
             referencedRelation: "blueprint_details"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
-            columns: ["forked_from_id"]
+            foreignKeyName: "blueprints__dep_fkey"
+            columns: ["_dep"]
             isOneToOne: false
             referencedRelation: "blueprints"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
-            columns: ["forked_from_id"]
+            foreignKeyName: "blueprints__dep_fkey"
+            columns: ["_dep"]
             isOneToOne: false
             referencedRelation: "collection_blueprint_cards"
             referencedColumns: ["blueprint_id"]
           },
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
-            columns: ["forked_from_id"]
+            foreignKeyName: "blueprints__dep_fkey"
+            columns: ["_dep"]
             isOneToOne: false
             referencedRelation: "my_blueprint_cards"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
-            columns: ["forked_from_id"]
+            foreignKeyName: "blueprints__dep_fkey"
+            columns: ["_dep"]
             isOneToOne: false
             referencedRelation: "my_liked_blueprint_cards"
             referencedColumns: ["id"]
@@ -478,16 +484,19 @@ export type Database = {
         Row: {
           color: string
           handle: string
+          new_feature: string
           user_id: string
         }
         Insert: {
           color?: string
           handle: string
+          new_feature?: string
           user_id?: string
         }
         Update: {
           color?: string
           handle?: string
+          new_feature?: string
           user_id?: string
         }
         Relationships: []
@@ -537,6 +546,8 @@ export type Database = {
           like_count: number | null
           liked_by_current_user: boolean | null
           meta: string[] | null
+          remixed_from_title: string | null
+          remixed_from_url: string | null
           tags: Json[] | null
           title: string | null
           title_description_tsv: unknown | null
@@ -547,42 +558,42 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
+            foreignKeyName: "blueprints__dep_fkey"
             columns: ["forked_from_id"]
             isOneToOne: false
             referencedRelation: "blueprint_card"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
+            foreignKeyName: "blueprints__dep_fkey"
             columns: ["forked_from_id"]
             isOneToOne: false
             referencedRelation: "blueprint_details"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
+            foreignKeyName: "blueprints__dep_fkey"
             columns: ["forked_from_id"]
             isOneToOne: false
             referencedRelation: "blueprints"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
+            foreignKeyName: "blueprints__dep_fkey"
             columns: ["forked_from_id"]
             isOneToOne: false
             referencedRelation: "collection_blueprint_cards"
             referencedColumns: ["blueprint_id"]
           },
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
+            foreignKeyName: "blueprints__dep_fkey"
             columns: ["forked_from_id"]
             isOneToOne: false
             referencedRelation: "my_blueprint_cards"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "blueprints_forked_from_id_fkey"
+            foreignKeyName: "blueprints__dep_fkey"
             columns: ["forked_from_id"]
             isOneToOne: false
             referencedRelation: "my_liked_blueprint_cards"

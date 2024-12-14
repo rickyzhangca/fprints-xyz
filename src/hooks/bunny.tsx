@@ -23,10 +23,10 @@ type SizeBracket = {
 };
 
 const SIZE_BRACKETS: readonly SizeBracket[] = [
-  { maxSize: 2 * 1024 * 1024, targetSize: 500 * 1024 }, // < 2MB -> 500KB
-  { maxSize: 10 * 1024 * 1024, targetSize: 2 * 1024 * 1024 }, // 2-10MB -> 2MB
-  { maxSize: 20 * 1024 * 1024, targetSize: 4 * 1024 * 1024 }, // 10-20MB -> 4MB
-  { maxSize: 100 * 1024 * 1024, targetSize: 5 * 1024 * 1024 }, // 20-100MB -> 5MB
+  { maxSize: 3 * 1024 * 1024, targetSize: 1 * 1024 * 1024 }, // <3MB -> 1MB
+  { maxSize: 10 * 1024 * 1024, targetSize: 3 * 1024 * 1024 }, // 3-10MB -> 3MB
+  { maxSize: 20 * 1024 * 1024, targetSize: 5 * 1024 * 1024 }, // 10-20MB -> 5MB
+  { maxSize: 100 * 1024 * 1024, targetSize: 5 * 1024 * 1024 }, // 7-100MB -> 7MB
 ];
 
 /**

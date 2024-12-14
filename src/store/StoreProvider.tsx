@@ -1,6 +1,6 @@
 import { cdnData } from '@/data';
 import { useBearStore, useCdnStore } from '@/store';
-import { supabase } from '@/supabase/client';
+import { supabase } from '@/supabase';
 import { useEffect } from 'react';
 
 export function StoreProvider({ children }: { children: React.ReactNode }) {
@@ -15,7 +15,10 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-      setUser(session?.user ?? null);
+    });
+
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
     });
 
     const {

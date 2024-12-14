@@ -116,6 +116,8 @@ export const ImportFormFactorioSchool = ({
       description: validatedData.data.descriptionMarkdown,
       image_url: getImgurSrcUrlFromId(validatedData.data.imgurImage.imgurId),
       is_public: true,
+      remixed_from_url: values.url,
+      remixed_from_title: validatedData.data.title,
     });
   };
 

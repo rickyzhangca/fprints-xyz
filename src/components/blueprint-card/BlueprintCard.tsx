@@ -33,7 +33,7 @@ export const BlueprintCard = ({
               className={tw(
                 // #232323 seems to be factorio's background color for blueprints
                 'w-full bg-[#232323] object-contain',
-                view === 'modern' ? 'max-h-96' : 'h-64'
+                view === 'modern' ? 'max-h-96' : 'h-[280px]'
               )}
             />
           ) : (
@@ -54,7 +54,7 @@ export const BlueprintCard = ({
           <Link
             to={`/blueprint/${blueprint.id}`}
             className={tw(
-              'text-steel-50 text-sm',
+              'text-sm text-steel-50',
               view === 'classic' && 'line-clamp-2'
             )}
           >

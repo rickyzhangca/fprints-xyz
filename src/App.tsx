@@ -1,27 +1,18 @@
 import { useCallback, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 
-import { Header, Nav } from '@/components';
+import { Header, Nav, NewFeature, SignUpDialog } from '@/components';
 import { useGetCollections, useGetProfile } from '@/hooks';
 import { useBearStore } from '@/store';
 
-import { Helmet } from 'react-helmet-async';
-
 const App = () => {
   const navigate = useNavigate();
-  const { supabase, session, setCollections } = useBearStore();
+  const { session, setCollections } = useBearStore();
   const setColumns = useBearStore(state => state.setColumns);
-
-  if (!supabase) return null;
-
+  const showSignUpDialog = useBearStore(state => state.showSignUpDialog);
+  const setShowSignUpDialog = useBearStore(state => state.setShowSignUpDialog);
   const getCollections = useGetCollections();
   const getProfile = useGetProfile();
-
-  useEffect(() => {
-    if (session && getProfile.isError && !getProfile.isLoading) {
-      navigate('/new-profile');
-    }
-  }, [session, getProfile.isError, navigate]);
 
   useEffect(() => {
     if (getCollections.data) {
@@ -45,13 +36,21 @@ const App = () => {
     return () => window.removeEventListener('resize', updateColumns);
   }, []);
 
+  useEffect(() => {
+    if (session && getProfile.isError && !getProfile.isLoading) {
+      navigate('/new-profile');
+    }
+  }, [session, getProfile.isError, navigate]);
+
   return (
     <div className="mx-auto max-w-[2180px] px-4 pb-10 md:px-8">
-      <Helmet>
-        <title>Fprints</title>
-      </Helmet>
       <Header />
       <Nav />
+      <NewFeature />
+      <SignUpDialog
+        open={showSignUpDialog}
+        onOpenChange={setShowSignUpDialog}
+      />
       <Outlet />
     </div>
   );

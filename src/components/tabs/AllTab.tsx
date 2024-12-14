@@ -1,7 +1,6 @@
-import { BlueprintCard } from '@/components';
+import { BlueprintCard, Paginate } from '@/components';
 import { useGetAllBlueprints, useGetBlueprintCardsCount } from '@/hooks';
 import { useBearStore } from '@/store';
-import { getPagination } from '@/utils';
 import { parseAsInteger, useQueryState } from 'nuqs';
 import Masonry from 'react-responsive-masonry';
 import { Outlet } from 'react-router-dom';
@@ -19,7 +18,7 @@ export const AllTab = () => {
           <BlueprintCard key={b.id} blueprint={b} />
         ))}
       </Masonry>
-      {getPagination(getBlueprintCardsCount.data ?? 0)}
+      <Paginate count={getBlueprintCardsCount.data ?? 0} />
       <Outlet />
     </>
   );

@@ -18,6 +18,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { Remix } from './subcomponents/remix';
 
 const blueprintFormSchema = z
   .object({
@@ -34,6 +35,8 @@ const blueprintFormSchema = z
     image_file: z.instanceof(File).optional(),
     image_url: z.string().url().optional(),
     is_public: z.boolean(),
+    remixed_from_url: z.string().url().optional(),
+    remixed_from_title: z.string().optional(),
   })
   .refine(data => !!data.image_file || !!data.image_url, {
     message: 'Please provide either an image file or image URL',
@@ -119,6 +122,8 @@ export const BlueprintForm = ({
             ),
             components: BlueprintUtils.Analysis.getComponents(blueprintData),
             is_public: values.is_public,
+            remixed_from_url: values.remixed_from_url ?? null,
+            remixed_from_title: values.remixed_from_title ?? null,
           },
           tags: values.tag_ids,
         },
@@ -151,6 +156,8 @@ export const BlueprintForm = ({
             ),
             components: BlueprintUtils.Analysis.getComponents(blueprintData),
             is_public: values.is_public,
+            remixed_from_url: values.remixed_from_url ?? null,
+            remixed_from_title: values.remixed_from_title ?? null,
           },
           tags: values.tag_ids,
         },
@@ -200,6 +207,7 @@ export const BlueprintForm = ({
           <Title />
           <Description />
           <Tags form={form} blueprintData={blueprintData} />
+          <Remix form={form} />
           <IsPrivate />
         </div>
         <DialogFooter>

@@ -34,6 +34,7 @@ export const Header = () => {
   return (
     <div className="flex items-center justify-between gap-4 py-5 lg:gap-6">
       <Logo />
+      <h1 className="absolute -z-10 select-none text-[#151515]">Fprints</h1>
       <div className="flex flex-1 items-center gap-4">
         <CreateBlueprintButton />
         <SearchBar />

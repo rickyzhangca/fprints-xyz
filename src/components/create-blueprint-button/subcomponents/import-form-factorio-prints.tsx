@@ -1,4 +1,5 @@
-import { ICreateBlueprintFormInitialValues } from '@/components/blueprint-form';
+import { ICreateBlueprintFormInitialValues } from '@/components';
+import { usePostGetFactorioPrintsData } from '@/hooks';
 import {
   Button,
   Form,
@@ -28,9 +29,6 @@ const schema = z.object({
     })
     .min(1, {
       message: 'Please provide a URL to the blueprint.',
-    })
-    .refine(async url => !!validateUrl(url), {
-      message: 'Blueprint not found on Factorio Prints',
     }),
 });
 
@@ -55,23 +53,11 @@ const factorioPrintsSchema = z.object({
   title: z.string().min(1),
 });
 
-const validateUrl = async (url: string) => {
-  const id = url.split('/').pop();
-  try {
-    const response = await fetch(
-      `https://facorio-blueprints.firebaseio.com/blueprints/${id}.json`
-    );
-    const data = await response.json();
-    if (!!data && !!data.blueprintString) return data;
-    return;
-  } catch {
-    return;
-  }
-};
-
 export const ImportFormFactorioPrints = ({
   onSuccess,
 }: ImportFormFactorioPrintsProps) => {
+  const postGetFactorioPrintsData = usePostGetFactorioPrintsData();
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -80,7 +66,7 @@ export const ImportFormFactorioPrints = ({
   });
 
   const onSubmit = async (values: z.infer<typeof schema>) => {
-    const data = await validateUrl(values.url);
+    const data = await postGetFactorioPrintsData.mutateAsync(values.url);
     if (!data) return;
 
     const validatedData = factorioPrintsSchema.parse(data);
@@ -92,6 +78,8 @@ export const ImportFormFactorioPrints = ({
       description: validatedData.descriptionMarkdown,
       image_url: getImgurSrcUrl(validatedData.imageUrl),
       is_public: true,
+      remixed_from_url: values.url,
+      remixed_from_title: validatedData.title,
     });
   };
 

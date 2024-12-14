@@ -61,6 +61,8 @@ export const ImportFormFactorioBin = ({
         title: data.post.title,
         description: data.node.description ?? '',
         is_public: true,
+        remixed_from_url: values.url,
+        remixed_from_title: data.post.title,
       });
     } else {
       onSuccess({
@@ -70,6 +72,8 @@ export const ImportFormFactorioBin = ({
         description: data.node.description ?? '',
         image_file: await postGetImage.mutateAsync(data.node.renderImageUrl),
         is_public: true,
+        remixed_from_url: values.url,
+        remixed_from_title: data.node.name,
       });
     }
   };

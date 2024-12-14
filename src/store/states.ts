@@ -1,4 +1,8 @@
-import type { Database, ICollectionWithBlueprintCount, IProfile } from '@/supabase';
+import type {
+  Database,
+  ICollectionWithBlueprintCount,
+  IProfile,
+} from '@/supabase';
 import { supabase } from '@/supabase';
 import { Session, SupabaseClient, User } from '@supabase/supabase-js';
 import isMobile from 'is-mobile';
@@ -25,18 +29,20 @@ export interface BearState extends PersistedState {
   columns: number;
   likesHistory: LikeHistory[];
   blueprintCardsPerPage: number;
+  removed_new_feature: string;
+  showSignUpDialog: boolean;
   setSession: (session: Session | null) => void;
   setUser: (user: User | null) => void;
   setProfile: (profile: IProfile | null) => void;
-  setCollections: (
-    collections: ICollectionWithBlueprintCount[] | null
-  ) => void;
+  setCollections: (collections: ICollectionWithBlueprintCount[] | null) => void;
   setSort: (sort: Sort) => void;
   setView: (view: 'modern' | 'classic') => void;
   setColumns: (columns: number) => void;
   setShowAdvancedFilters: (showAdvancedFilters: boolean) => void;
   setLikesHistory: (likesHistory: LikeHistory[]) => void;
   setBlueprintCardsPerPage: (blueprintCardsPerPage: number) => void;
+  setRemovedNewFeature: (removedNewFeature: string) => void;
+  setShowSignUpDialog: (showSignUpDialog: boolean) => void;
 }
 
 const getOptimalCardsPerPage = () => {
@@ -61,6 +67,8 @@ export const useBearStore = create<BearState>()(
       showAdvancedFilters: false,
       likesHistory: [],
       blueprintCardsPerPage: getOptimalCardsPerPage(),
+      removed_new_feature: '',
+      showSignUpDialog: false,
       setSession: session => set({ session }),
       setUser: user => set({ user }),
       setProfile: profile => set({ profile }),
@@ -72,6 +80,9 @@ export const useBearStore = create<BearState>()(
       setLikesHistory: likesHistory => set({ likesHistory }),
       setBlueprintCardsPerPage: blueprintCardsPerPage =>
         set({ blueprintCardsPerPage }),
+      setRemovedNewFeature: removedNewFeature =>
+        set({ removed_new_feature: removedNewFeature }),
+      setShowSignUpDialog: showSignUpDialog => set({ showSignUpDialog }),
     }),
     {
       name: 'user-preferences',
@@ -79,6 +90,7 @@ export const useBearStore = create<BearState>()(
         sort: state.sort,
         view: state.view,
         showAdvancedFilters: state.showAdvancedFilters,
+        removed_new_feature: state.removed_new_feature,
       }),
     }
   )

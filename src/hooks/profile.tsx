@@ -10,12 +10,12 @@ export const useGetProfile = () => {
   const setProfile = useBearStore(state => state.setProfile);
 
   return useQuery({
-    queryKey: ['get-user-profile', session?.user.id],
+    queryKey: ['get-user-profile', session?.user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase!
+      const { data, error } = await supabase
         .from('user_profiles')
         .select('*')
-        .eq('user_id', session!.user.id)
+        .eq('user_id', session?.user?.id ?? '')
         .single();
 
       if (error) throw error;
@@ -23,7 +23,7 @@ export const useGetProfile = () => {
       setProfile(data);
       return data as IProfile;
     },
-    enabled: !!session?.user.id,
+    enabled: !!session?.user?.id,
     retry: false,
   });
 };
@@ -34,7 +34,7 @@ export const useGetProfileByUserId = (userId: string) => {
   return useQuery({
     queryKey: ['get-user-profile', userId],
     queryFn: async () => {
-      const { data, error } = await supabase!
+      const { data, error } = await supabase
         .from('user_profiles')
         .select('*')
         .eq('user_id', userId)
@@ -58,11 +58,13 @@ export const useCreateProfile = () => {
 
   return useMutation({
     mutationFn: async (handle: string) => {
-      const newProfile = await supabase!
+      if (!session?.user?.id) throw new Error('User not found');
+
+      const newProfile = await supabase
         .from('user_profiles')
         .insert([
           {
-            user_id: session!.user.id,
+            user_id: session.user.id,
             handle,
             color: getRandomBackground(),
           },
@@ -77,16 +79,16 @@ export const useCreateProfile = () => {
         throw newProfile.error;
       }
 
-      const newCollection = await supabase!
+      const newCollection = await supabase
         .from('collections')
-        .insert([{ user_id: session!.user.id, title: 'My collection' }])
+        .insert([{ user_id: session.user.id, title: 'My collection' }])
         .select()
         .single();
 
-      const myCollections = await supabase!
+      const myCollections = await supabase
         .from('collections')
         .select('*')
-        .eq('user_id', session!.user.id);
+        .eq('user_id', session.user.id);
 
       if (newCollection.error || myCollections.error) throw new Error();
 
@@ -104,10 +106,10 @@ export const useGetMyPrintsCount = () => {
   const session = useBearStore(state => state.session);
 
   return useQuery({
-    queryKey: ['get-my-prints-count', session?.user.id],
+    queryKey: ['get-my-prints-count', session?.user?.id],
     queryFn: async () => {
-      if (!session?.user.id) throw new Error('User not found');
-      const { count, error } = await supabase!
+      if (!session?.user?.id) throw new Error('User not found');
+      const { count, error } = await supabase
         .from('blueprints')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', session.user.id);
@@ -115,7 +117,26 @@ export const useGetMyPrintsCount = () => {
       if (error) throw error;
       return count;
     },
-    enabled: !!session?.user.id,
+    enabled: !!session?.user?.id,
+  });
+};
+
+export const useUpdateProfile = () => {
+  const supabase = useBearStore(state => state.supabase);
+  const session = useBearStore(state => state.session);
+
+  return useMutation({
+    mutationFn: async (profile: IProfile) => {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .update(profile)
+        .eq('user_id', session?.user?.id ?? '')
+        .select()
+        .single();
+
+      if (error || !data) throw error;
+      return data as IProfile;
+    },
   });
 };
 
@@ -124,9 +145,9 @@ export const useRPCStats = (enabled: boolean) => {
   const session = useBearStore(state => state.session);
 
   return useQuery({
-    queryKey: ['get-user-stats', session?.user.id],
+    queryKey: ['get-user-stats', session?.user?.id],
     queryFn: async () => {
-      if (!session?.user.id) throw new Error('User not found');
+      if (!session?.user?.id) throw new Error('User not found');
       const { data, error } = await supabase.rpc('get_user_blueprint_stats', {
         user_id: session.user.id,
       });
