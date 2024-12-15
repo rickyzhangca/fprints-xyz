@@ -8,7 +8,7 @@ import {
 } from '@/hooks';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/ui';
 import { CheckIcon, CircleHelpIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { ICreateBlueprintFormValues } from '../BlueprintForm';
 
@@ -18,10 +18,6 @@ export const Remix = ({
   form: UseFormReturn<ICreateBlueprintFormValues>;
 }) => {
   const [title, setTitle] = useState(form.getValues('remixed_from_title'));
-
-  useEffect(() => {
-    setTitle(form.getValues('remixed_from_title'));
-  }, [form.getValues('remixed_from_title')]);
 
   const postGetFactorioBinData = usePostGetFactorioBinData();
   const postGetFactorioSchoolData = usePostGetFactorioSchoolData();
@@ -52,30 +48,35 @@ export const Remix = ({
               placeholder="If this is a remix, reference the original blueprint here"
               value={field.value}
               onChange={async e => {
-                field.onChange(e);
-                form.setValue('remixed_from_title', '');
-                if (e.target.value.includes('factoriobin.com')) {
-                  const data = await postGetFactorioBinData.mutateAsync(
-                    e.target.value
-                  );
+                const value = e.target.value.trim();
+                field.onChange(value);
+
+                form.setValue('remixed_from_title', undefined);
+                setTitle(undefined);
+
+                if (!value) return;
+
+                if (value.includes('factoriobin.com')) {
+                  const data = await postGetFactorioBinData.mutateAsync(value);
                   form.setValue('remixed_from_title', data.node.name);
-                } else if (e.target.value.includes('factorioprints.com')) {
-                  const data = await postGetFactorioPrintsData.mutateAsync(
-                    e.target.value
-                  );
+                  setTitle(data.node.name);
+                } else if (value.includes('factorioprints.com')) {
+                  const data =
+                    await postGetFactorioPrintsData.mutateAsync(value);
                   form.setValue('remixed_from_title', data.title);
-                } else if (e.target.value.includes('factorio.school')) {
+                  setTitle(data.title);
+                } else if (value.includes('factorio.school')) {
                   const data = await postGetFactorioSchoolData.mutateAsync(
-                    e.target.value.split('/').pop()!
+                    value.split('/').pop()!
                   );
                   form.setValue('remixed_from_title', data.title);
-                } else if (e.target.value.includes('fprints.xyz')) {
+                  setTitle(data.title);
+                } else if (value.includes('fprints.xyz')) {
                   const data = await postGetBlueprintTitle.mutateAsync(
-                    e.target.value.split('/').pop()!
+                    value.split('/').pop()!
                   );
                   form.setValue('remixed_from_title', data?.title ?? '');
-                } else {
-                  form.setValue('remixed_from_title', '');
+                  setTitle(data?.title ?? '');
                 }
               }}
             />
