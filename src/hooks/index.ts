@@ -2,6 +2,7 @@ export * from './auth';
 export * from './blueprints';
 export * from './bunny';
 export * from './collections';
+export * from './comments';
 export * from './copy';
 export * from './factorio-bin';
 export * from './factorio-prints';

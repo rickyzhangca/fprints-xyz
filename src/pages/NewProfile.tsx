@@ -17,7 +17,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { z } from 'zod';
 
 const schema = z.object({
@@ -27,6 +27,9 @@ const schema = z.object({
 });
 
 export const NewProfile = () => {
+  const [urlParams] = useSearchParams();
+  const blueprintId = urlParams.get('blueprint_id');
+
   const getProfile = useGetProfile();
   const createProfile = useCreateProfile();
   const navigate = useNavigate();
@@ -56,16 +59,10 @@ export const NewProfile = () => {
   };
 
   useEffect(() => {
-    if (getProfile.data) {
-      navigate('/');
+    if (getProfile.data || createProfile.isSuccess) {
+      navigate(blueprintId ? `/blueprint/${blueprintId}` : '/');
     }
-  }, [getProfile.data, navigate]);
-
-  useEffect(() => {
-    if (createProfile.isSuccess) {
-      navigate('/');
-    }
-  }, [createProfile.isSuccess, navigate]);
+  }, [getProfile.data, createProfile.isSuccess, navigate]);
 
   return (
     <Dialog open>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Header, Nav, NewFeature, SignUpDialog } from '@/components';
 import { useGetCollections, useGetProfile } from '@/hooks';
@@ -7,6 +7,10 @@ import { useBearStore } from '@/store';
 
 const App = () => {
   const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+  const blueprintId = searchParams.get('blueprint_id');
+
   const { session, setCollections } = useBearStore();
   const setColumns = useBearStore(state => state.setColumns);
   const showSignUpDialog = useBearStore(state => state.showSignUpDialog);
@@ -38,7 +42,11 @@ const App = () => {
 
   useEffect(() => {
     if (session && getProfile.isError && !getProfile.isLoading) {
-      navigate('/new-profile');
+      navigate(
+        blueprintId
+          ? `/new-profile?blueprint_id=${blueprintId}`
+          : '/new-profile'
+      );
     }
   }, [session, getProfile.isError, navigate]);
 

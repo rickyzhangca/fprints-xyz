@@ -1,9 +1,8 @@
-import { github, google } from '@/assets';
+import { discord, github, google } from '@/assets';
 import {
   useForgotPasswordWithEmail,
   useLogInWithEmail,
-  useLogInWithGithub,
-  useLogInWithGoogle,
+  useLogInWithSocial,
 } from '@/hooks';
 import {
   Button,
@@ -40,8 +39,7 @@ const LoginContent = ({
   setIsForgot: (isForgot: boolean) => void;
 }) => {
   const [error, setError] = useState<string | null>(null);
-  const logInWithGoogle = useLogInWithGoogle();
-  const logInWithGithub = useLogInWithGithub();
+  const logInWithSocial = useLogInWithSocial();
   const logInWithEmail = useLogInWithEmail();
 
   const loginForm = useForm<z.infer<typeof loginSchema>>({
@@ -77,16 +75,23 @@ const LoginContent = ({
                 className="size-6 rounded-full bg-white"
               />
             }
-            onClick={() => logInWithGoogle.mutate()}
+            onClick={() => logInWithSocial.mutate('google')}
           >
             Login with Google
           </Button>
           <Button
             className="h-12 gap-3 bg-white/80 hover:bg-white/90 active:bg-white/80"
             leftIcon={<img src={github} alt="github" className="size-5" />}
-            onClick={() => logInWithGithub.mutate()}
+            onClick={() => logInWithSocial.mutate('github')}
           >
             Login with GitHub
+          </Button>
+          <Button
+            className="h-12 gap-3 bg-[#5865F2] text-white hover:bg-[#5865F2]/90 active:bg-[#5865F2]/80"
+            leftIcon={<img src={discord} alt="discord" className="size-5" />}
+            onClick={() => logInWithSocial.mutate('discord')}
+          >
+            Login with Discord
           </Button>
         </div>
       </div>
@@ -178,7 +183,7 @@ const ForgotPasswordContent = ({
   useEffect(() => {
     if (forgotPasswordWithEmail.isError)
       setError(forgotPasswordWithEmail.error.message);
-  }, [, forgotPasswordWithEmail.isError]);
+  }, [forgotPasswordWithEmail.isError]);
 
   useEffect(() => {
     if (forgotPasswordWithEmail.isSuccess)

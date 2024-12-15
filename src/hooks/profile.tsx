@@ -10,7 +10,7 @@ export const useGetProfile = () => {
   const setProfile = useBearStore(state => state.setProfile);
 
   return useQuery({
-    queryKey: ['get-user-profile', session?.user?.id],
+    queryKey: ['get-my-profile'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('user_profiles')

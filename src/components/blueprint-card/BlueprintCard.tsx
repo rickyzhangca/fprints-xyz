@@ -65,6 +65,7 @@ export const BlueprintCard = ({
           <div className="flex min-w-0 grow items-center gap-1.5">
             <Link to={`/user/${blueprint.user_id}`}>
               <ProfilePic
+                size="sm"
                 color={blueprint.user_color}
                 name={blueprint.user_handle}
               />

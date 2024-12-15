@@ -1,9 +1,5 @@
-import { github, google } from '@/assets';
-import {
-  useSignUpWithEmail,
-  useSignUpWithGithub,
-  useSignUpWithGoogle,
-} from '@/hooks';
+import { discord, github, google } from '@/assets';
+import { useSignUpWithEmail, useSignUpWithSocial } from '@/hooks';
 import {
   Button,
   Dialog,
@@ -34,8 +30,7 @@ type SignUpDialogProps = {
 };
 
 export const SignUpDialog = ({ open, onOpenChange }: SignUpDialogProps) => {
-  const signUpWithGoogle = useSignUpWithGoogle();
-  const signUpWithGithub = useSignUpWithGithub();
+  const signUpWithSocial = useSignUpWithSocial();
   const signUpWithEmail = useSignUpWithEmail();
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -79,16 +74,23 @@ export const SignUpDialog = ({ open, onOpenChange }: SignUpDialogProps) => {
                   className="size-6 rounded-full bg-white"
                 />
               }
-              onClick={() => signUpWithGoogle.mutate()}
+              onClick={() => signUpWithSocial.mutate('google')}
             >
               Sign up with Google
             </Button>
             <Button
               className="h-12 gap-3 bg-white/80 hover:bg-white/90 active:bg-white/80"
               leftIcon={<img src={github} alt="github" className="size-5" />}
-              onClick={() => signUpWithGithub.mutate()}
+              onClick={() => signUpWithSocial.mutate('github')}
             >
               Sign up with GitHub
+            </Button>
+            <Button
+              className="h-12 gap-3 bg-[#5865F2] text-white hover:bg-[#5865F2]/90 active:bg-[#5865F2]/80"
+              leftIcon={<img src={discord} alt="discord" className="size-5" />}
+              onClick={() => signUpWithSocial.mutate('discord')}
+            >
+              Sign up with Discord
             </Button>
           </div>
         </div>

@@ -1,5 +1,6 @@
 export { default as bug } from './bug.svg';
 export { default as crashSite } from './crash-site.svg';
+export { default as discord } from './discord.svg';
 export { default as enter } from './enter.svg';
 export { default as fav } from './fav.svg';
 export { default as gem } from './gem.svg';

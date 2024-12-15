@@ -3,6 +3,8 @@ export * from './blueprint-dialog';
 export * from './blueprint-form';
 export * from './blueprint-glance';
 export * from './collect-button';
+export * from './comment-textarea';
+export * from './comment-tree';
 export * from './component-combobox';
 export * from './component-icon';
 export * from './copy-button';

@@ -28,16 +28,12 @@ import {
 } from '@/ui';
 import { tw } from '@/utils';
 import { Link2Icon, RadiationIcon, XIcon } from 'lucide-react';
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Comments } from './subcomponents/comments';
 import { Copied } from './subcomponents/copied';
+import { Description } from './subcomponents/description';
 import { Remix } from './subcomponents/remix';
-
-const MarkdownPreview = lazy(() =>
-  import('@uiw/react-md-editor').then(mdx => ({
-    default: mdx.default.Markdown,
-  }))
-);
 
 export const BlueprintDialog = () => {
   const navigate = useNavigate();
@@ -146,24 +142,7 @@ export const BlueprintDialog = () => {
               </h2>
               <div className="prose prose-invert w-full max-w-full">
                 {blueprint.description && (
-                  <Suspense fallback={<div>Loading description...</div>}>
-                    <section aria-label="Blueprint description">
-                      <MarkdownPreview
-                        source={blueprint.description ?? ''}
-                        style={
-                          {
-                            '--color-border-muted': '#474747',
-                            '--color-border-default': '#333',
-                            '--color-canvas-default': '#313031',
-                            '--color-fg-default': '#e7e6e7',
-                          } as React.CSSProperties
-                        }
-                        wrapperElement={{
-                          'data-color-mode': 'dark',
-                        }}
-                      />
-                    </section>
-                  </Suspense>
+                  <Description description={blueprint.description} />
                 )}
               </div>
               {parseBlueprintString.data && (
@@ -254,6 +233,7 @@ export const BlueprintDialog = () => {
                   user_id={blueprint.user_id}
                 />
               </footer>
+              <Comments blueprintId={blueprintId} />
             </div>
             <div className="hidden lg:block">
               <Controls blueprint={blueprint} />

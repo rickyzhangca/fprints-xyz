@@ -7,15 +7,16 @@ export const ProfilePic = ({
   color,
   name,
 }: {
-  size?:'md'|'lg'
+  size?: 'sm' | 'md' | 'lg';
   color?: IBlueprintCard['user_color'];
   name?: IBlueprintCard['user_handle'];
 }) => {
   return (
     <Avatar
       className={tw(
-        'size-5',
+        'size-7',
         size === 'lg' && 'size-10',
+        size === 'sm' && 'size-5'
       )}
       style={{
         backgroundColor: color ?? '#1D86C7',

@@ -5,6 +5,10 @@ import { useNavigate } from 'react-router-dom';
 
 export const useSignUpWithEmail = () => {
   const supabase = useBearStore(state => state.supabase);
+  const blueprintIdForSignUpDialog = useBearStore(
+    state => state.blueprintIdForSignUpDialog
+  );
+
   return useMutation<
     AuthResponse['data'],
     Error,
@@ -26,7 +30,9 @@ export const useSignUpWithEmail = () => {
         email,
         password,
         options: {
-          emailRedirectTo: 'https://fprints.xyz/new-profile',
+          emailRedirectTo: blueprintIdForSignUpDialog
+            ? `https://fprints.xyz/new-profile?blueprint_id=${blueprintIdForSignUpDialog}`
+            : `https://fprints.xyz/new-profile`,
         },
       });
       if (res.error) throw new Error(res.error.message);
@@ -73,64 +79,43 @@ export const useForgotPasswordWithEmail = () => {
   });
 };
 
-export const useLogInWithGoogle = () => {
+export const useLogInWithSocial = () => {
   const supabase = useBearStore(state => state.supabase);
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async (provider: 'google' | 'discord' | 'github') => {
       const res = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+        provider,
       });
 
       if (res?.error) throw res.error;
 
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
-    },
-  });
-};
-
-export const useSignUpWithGoogle = () => {
-  const supabase = useBearStore(state => state.supabase);
-
-  return useMutation({
-    mutationFn: async () => {
-      await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `/new-profile`,
-        },
+      queryClient.invalidateQueries({
+        queryKey: [
+          'get-my-collections',
+          'get-my-profile',
+          'get-my-liked-blueprints',
+        ],
       });
     },
   });
 };
 
-export const useLogInWithGithub = () => {
+export const useSignUpWithSocial = () => {
   const supabase = useBearStore(state => state.supabase);
-  const queryClient = useQueryClient();
+  const blueprintIdForSignUpDialog = useBearStore(
+    state => state.blueprintIdForSignUpDialog
+  );
 
   return useMutation({
-    mutationFn: async () => {
-      const res = await supabase.auth.signInWithOAuth({
-        provider: 'github',
-      });
-
-      if (res?.error) throw res.error;
-
-      queryClient.invalidateQueries({ queryKey: ['collections'] });
-    },
-  });
-};
-
-export const useSignUpWithGithub = () => {
-  const supabase = useBearStore(state => state.supabase);
-
-  return useMutation({
-    mutationFn: async () => {
+    mutationFn: async (provider: 'google' | 'discord' | 'github') => {
       await supabase.auth.signInWithOAuth({
-        provider: 'github',
+        provider,
         options: {
-          redirectTo: `/new-profile`,
+          redirectTo: blueprintIdForSignUpDialog
+            ? `https://fprints.xyz/new-profile?blueprint_id=${blueprintIdForSignUpDialog}`
+            : `https://fprints.xyz/new-profile`,
         },
       });
     },
@@ -149,8 +134,8 @@ export const useSignOut = () => {
       await supabase?.auth.signOut();
       setProfile(null);
       setCollections(null);
-      queryClient.removeQueries({ queryKey: ['get-user-profile'] });
-      queryClient.removeQueries({ queryKey: ['get-user-collections'] });
+      queryClient.removeQueries({ queryKey: ['get-my-profile'] });
+      queryClient.removeQueries({ queryKey: ['get-my-collections'] });
       navigate('/');
     },
   });

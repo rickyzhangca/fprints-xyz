@@ -31,6 +31,7 @@ export interface BearState extends PersistedState {
   blueprintCardsPerPage: number;
   removed_new_feature: string;
   showSignUpDialog: boolean;
+  blueprintIdForSignUpDialog: string | null;
   setSession: (session: Session | null) => void;
   setUser: (user: User | null) => void;
   setProfile: (profile: IProfile | null) => void;
@@ -43,6 +44,7 @@ export interface BearState extends PersistedState {
   setBlueprintCardsPerPage: (blueprintCardsPerPage: number) => void;
   setRemovedNewFeature: (removedNewFeature: string) => void;
   setShowSignUpDialog: (showSignUpDialog: boolean) => void;
+  setBlueprintIdForSignUpDialog: (blueprintId: string) => void;
 }
 
 const getOptimalCardsPerPage = () => {
@@ -69,6 +71,7 @@ export const useBearStore = create<BearState>()(
       blueprintCardsPerPage: getOptimalCardsPerPage(),
       removed_new_feature: '',
       showSignUpDialog: false,
+      blueprintIdForSignUpDialog: null,
       setSession: session => set({ session }),
       setUser: user => set({ user }),
       setProfile: profile => set({ profile }),
@@ -83,6 +86,8 @@ export const useBearStore = create<BearState>()(
       setRemovedNewFeature: removedNewFeature =>
         set({ removed_new_feature: removedNewFeature }),
       setShowSignUpDialog: showSignUpDialog => set({ showSignUpDialog }),
+      setBlueprintIdForSignUpDialog: blueprintId =>
+        set({ blueprintIdForSignUpDialog: blueprintId }),
     }),
     {
       name: 'user-preferences',

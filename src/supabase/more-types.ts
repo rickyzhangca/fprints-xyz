@@ -25,3 +25,7 @@ export const SupabaseEdgeFunctions = {
   bunnyUpload: 'fprints-bunny',
   getImage: 'fprints-get-image',
 } as const;
+
+export type IComment = Database['public']['Tables']['comments']['Row'];
+
+export type ICommentInsert = Database['public']['Tables']['comments']['Insert'];

@@ -28,7 +28,7 @@ const blueprintFormSchema = z
     blueprint_string: z.string().min(1, {
       message: 'Oh no, you forgot the blueprint string!',
     }),
-    description: z.string(),
+    description: z.string().optional(),
     tag_ids: z.array(z.string()).min(1, {
       message: 'Please select at least one tag.',
     }),
@@ -220,9 +220,7 @@ export const BlueprintForm = ({
             data-umami-event={
               mode === 'create' ? 'create-blueprint' : 'edit-blueprint'
             }
-            type="button"
-            // for some reason, type="submit" doesn't work here
-            onClick={() => onSubmit(form.getValues())}
+            type="submit"
             disabled={isPending}
           >
             {mode === 'create'

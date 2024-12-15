@@ -48,12 +48,14 @@ export const NewFeature = () => {
             updateProfile.mutate({ ...profile, new_feature: '' });
             setRemovedNewFeature(KEY);
           }}
+          data-umami-event="new-feature-dismiss-signed-in"
         >
           Got it
         </Button>
       ) : (
         <div className="flex flex-col gap-2">
           <Button
+            data-umami-event="new-feature-dismiss-signing-up"
             onClick={() => {
               setShowSignUpDialog(true);
               setRemovedNewFeature(KEY);
@@ -61,7 +63,11 @@ export const NewFeature = () => {
           >
             Sign up to post yours!
           </Button>
-          <Button variant="ghost" onClick={() => setRemovedNewFeature(KEY)}>
+          <Button
+            variant="ghost"
+            onClick={() => setRemovedNewFeature(KEY)}
+            data-umami-event="new-feature-dismiss-no-signup"
+          >
             Got it
           </Button>
         </div>

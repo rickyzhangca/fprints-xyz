@@ -68,7 +68,7 @@ export const LikeButton = ({ variant, blueprint }: LikeButtonProps) => {
             shouldHighlight && 'fill-red-500 group-hover:fill-red-600'
           )}
         />
-        <p>{likeCount}</p>
+        {!!likeCount && likeCount > 0 && <p>{likeCount}</p>}
       </button>
     );
   }

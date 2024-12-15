@@ -37,14 +37,6 @@ if (import.meta.env.DEV) {
   document.head.appendChild(script);
 }
 
-if (import.meta.env.PROD) {
-  const script = document.createElement('script');
-  script.defer = true;
-  script.src = 'https://fprints-umami.haoyuzhangca2973.workers.dev/script.js';
-  script.dataset.websiteId = '588a5cbe-e446-40dd-862b-eeca6f81f301';
-  document.head.appendChild(script);
-}
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

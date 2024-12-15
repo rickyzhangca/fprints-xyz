@@ -324,70 +324,79 @@ export type Database = {
           content: string
           created_at: string
           id: string
+          is_deleted: boolean
+          is_hidden: boolean
           parent_comment_id: string | null
+          updated_at: string | null
           user_id: string
         }
         Insert: {
-          blueprint_id?: string
-          content: string
+          blueprint_id: string
+          content?: string
           created_at?: string
           id?: string
+          is_deleted?: boolean
+          is_hidden?: boolean
           parent_comment_id?: string | null
-          user_id?: string
+          updated_at?: string | null
+          user_id: string
         }
         Update: {
           blueprint_id?: string
           content?: string
           created_at?: string
           id?: string
+          is_deleted?: boolean
+          is_hidden?: boolean
           parent_comment_id?: string | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "comments_blueprint_id_fkey"
+            foreignKeyName: "comments__blueprint_id_fkey"
             columns: ["blueprint_id"]
             isOneToOne: false
             referencedRelation: "blueprint_card"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "comments_blueprint_id_fkey"
+            foreignKeyName: "comments__blueprint_id_fkey"
             columns: ["blueprint_id"]
             isOneToOne: false
             referencedRelation: "blueprint_details"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "comments_blueprint_id_fkey"
+            foreignKeyName: "comments__blueprint_id_fkey"
             columns: ["blueprint_id"]
             isOneToOne: false
             referencedRelation: "blueprints"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "comments_blueprint_id_fkey"
+            foreignKeyName: "comments__blueprint_id_fkey"
             columns: ["blueprint_id"]
             isOneToOne: false
             referencedRelation: "collection_blueprint_cards"
             referencedColumns: ["blueprint_id"]
           },
           {
-            foreignKeyName: "comments_blueprint_id_fkey"
+            foreignKeyName: "comments__blueprint_id_fkey"
             columns: ["blueprint_id"]
             isOneToOne: false
             referencedRelation: "my_blueprint_cards"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "comments_blueprint_id_fkey"
+            foreignKeyName: "comments__blueprint_id_fkey"
             columns: ["blueprint_id"]
             isOneToOne: false
             referencedRelation: "my_liked_blueprint_cards"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "comments_parent_comment_id_fkey"
+            foreignKeyName: "comments__parent_comment_id_fkey"
             columns: ["parent_comment_id"]
             isOneToOne: false
             referencedRelation: "comments"

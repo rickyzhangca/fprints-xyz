@@ -5,6 +5,7 @@ const MDEditor = lazy(() => import('@uiw/react-md-editor'));
 
 export const Description = () => {
   const commandsFilter = useMemo(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     () => (command: any) =>
       [
         'bold',
