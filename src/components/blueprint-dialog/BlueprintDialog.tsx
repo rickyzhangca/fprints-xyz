@@ -1,4 +1,4 @@
-import { BlueprintGlance, EditBlueprintButton } from '@/components';
+import { Background, BlueprintGlance, EditBlueprintButton } from '@/components';
 import {
   By,
   Collected,
@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from '@/ui';
 import { tw } from '@/utils';
+import { useMeasure } from '@uidotdev/usehooks';
 import { Link2Icon, RadiationIcon, XIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -45,6 +46,7 @@ export const BlueprintDialog = () => {
   const [isEditing, setIsEditing] = useState(false);
   const deleteBlueprint = useDeleteBlueprint();
   const rpcCopy = useRPCCopy();
+  const [previewRef, { width: previewWidth }] = useMeasure();
 
   useEffect(() => {
     if (blueprint?.blueprint_string && !parseBlueprintString.data) {
@@ -114,10 +116,20 @@ export const BlueprintDialog = () => {
               />
               <div className="text-sm font-bold">ESC</div>
             </button>
+            {blueprint.background &&
+              blueprint.image_original_width &&
+              previewWidth && (
+                <Background
+                  background={blueprint.background}
+                  imageWidth={blueprint.image_original_width}
+                  previewWidth={previewWidth}
+                />
+              )}
             <img
+              ref={previewRef}
               src={blueprint.image_url ?? ''}
               alt={`Blueprint preview: ${blueprint.title}`}
-              className="max-h-full max-w-full object-contain"
+              className="relative max-h-full max-w-full object-contain"
               loading="eager"
             />
           </div>

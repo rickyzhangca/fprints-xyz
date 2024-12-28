@@ -3,8 +3,10 @@ import { useBearStore } from '@/store/states';
 import type { IBlueprintCard } from '@/supabase';
 import { Tag } from '@/ui';
 import { tw } from '@/utils';
+import { useMeasure } from '@uidotdev/usehooks';
 import { ImageOffIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Background } from '../background';
 import { LikeButton } from '../like-button';
 import { Badges } from './subcomponents/badges';
 
@@ -19,6 +21,7 @@ export const BlueprintCard = ({
 }: BlueprintCardProps) => {
   if (!blueprint.id) return;
   const view = useBearStore(state => state.view);
+  const [previewRef, { width: previewWidth }] = useMeasure();
 
   return (
     <div className="mb-3 flex w-full flex-col gap-3">
@@ -27,15 +30,27 @@ export const BlueprintCard = ({
       >
         <div className="relative w-full cursor-pointer overflow-hidden rounded-lg outline outline-white/5 transition-all duration-100 hover:outline-white/50">
           {blueprint.image_url ? (
-            <img
-              src={blueprint.image_url}
-              alt="blueprint"
-              className={tw(
-                // #232323 seems to be factorio's background color for blueprints
-                'w-full bg-[#232323] object-contain',
-                view === 'modern' ? 'max-h-96' : 'h-[280px]'
-              )}
-            />
+            <div className="relative bg-[#232323]">
+              {blueprint.background &&
+                blueprint.image_original_width &&
+                previewWidth && (
+                  <Background
+                    background={blueprint.background}
+                    imageWidth={blueprint.image_original_width}
+                    previewWidth={previewWidth}
+                  />
+                )}
+              <img
+                ref={previewRef}
+                src={blueprint.image_url}
+                alt="blueprint"
+                className={tw(
+                  // #232323 seems to be factorio's background color for blueprints
+                  'relative w-full object-contain',
+                  view === 'modern' ? 'max-h-96' : 'h-[280px]'
+                )}
+              />
+            </div>
           ) : (
             <div className="flex h-64 items-center justify-center bg-steel-800 text-steel-400">
               <ImageOffIcon size={24} />

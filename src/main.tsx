@@ -19,6 +19,7 @@ import {
   Navigate,
   RouterProvider,
 } from 'react-router-dom';
+import { scan } from 'react-scan';
 import App from './App.tsx';
 import { BlueprintDialog, UserDialog } from './components/index.ts';
 import {
@@ -31,10 +32,11 @@ import './index.css';
 import { Lab, NewProfile, ResetPassword, Search } from './pages/index.ts';
 import { StoreProvider } from './store/index.ts';
 
-if (import.meta.env.DEV) {
-  const script = document.createElement('script');
-  script.src = 'https://unpkg.com/react-scan/dist/auto.global.js';
-  document.head.appendChild(script);
+if (typeof window !== 'undefined') {
+  scan({
+    enabled: false,
+    showToolbar: import.meta.env.DEV,
+  });
 }
 
 const queryClient = new QueryClient({
@@ -140,7 +142,7 @@ createRoot(document.getElementById('root')!).render(
             <TooltipProvider delayDuration={0} skipDelayDuration={0}>
               <RouterProvider router={router} />
               <Popover>
-                <PopoverTrigger className="fixed bottom-4 right-4 rounded-full bg-white/20 p-3 text-steel-200 backdrop-blur-lg transition duration-75 hover:bg-white/30 hover:text-steel-50 active:bg-white/40 active:text-steel-50">
+                <PopoverTrigger className="fixed bottom-4 right-4 z-10 rounded-full bg-white/20 p-3 text-steel-200 backdrop-blur-lg transition duration-75 hover:bg-white/30 hover:text-steel-50 active:bg-white/40 active:text-steel-50">
                   <BugIcon
                     className="size-5 shrink-0"
                     absoluteStrokeWidth

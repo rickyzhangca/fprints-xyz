@@ -20,7 +20,8 @@ const _BlueprintGlance = ({
   onCopy,
   hideSwap,
 }: BlueprintGlanceProps) => {
-  const type = BlueprintUtils.Analysis.getBlueprintType(blueprintData);
+  const type =
+    BlueprintUtils.Analysis.getBlueprintType(blueprintData) || 'blueprint';
 
   const { label } = BlueprintUtils.Analysis.cleanUpLabel(
     blueprintData[type].label ?? ''
@@ -104,7 +105,7 @@ export const BlueprintGlance = ({
       }
     }, [blueprintData]);
 
-    const encodedString = useMemo(handleEncode, [handleEncode]);
+    const encodedString = useMemo(() => handleEncode(), [handleEncode]);
 
     return (
       <Accordion type="single" collapsible className={isChild ? 'ml-6' : ''}>

@@ -36,6 +36,7 @@ export const CreateBlueprintButton = ({
       image_file: undefined,
       description: '',
       is_public: true,
+      background: 'minimal',
     });
   const navigate = useNavigate();
 

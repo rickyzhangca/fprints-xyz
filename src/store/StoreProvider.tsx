@@ -15,10 +15,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
-    });
-
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
+      setUser(session?.user ?? null);
     });
 
     const {

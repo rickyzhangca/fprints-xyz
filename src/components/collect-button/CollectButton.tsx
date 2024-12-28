@@ -60,6 +60,9 @@ export const CollectButton = ({
                 queryClient.invalidateQueries({
                   queryKey: ['get-blueprints-by-collection', collections[0].id],
                 });
+                queryClient.invalidateQueries({
+                  queryKey: ['get-my-collections'],
+                });
                 setNewlyCollected(false);
                 setNewlyUncollected(true);
               },
@@ -94,6 +97,12 @@ export const CollectButton = ({
           },
           {
             onSuccess: () => {
+              queryClient.invalidateQueries({
+                queryKey: ['get-blueprints-by-collection', collections[0].id],
+              });
+              queryClient.invalidateQueries({
+                queryKey: ['get-my-collections'],
+              });
               setNewlyCollected(true);
               setNewlyUncollected(false);
             },

@@ -38,6 +38,7 @@ const MyLikes = () => {
 
 const Collections = () => {
   const { collections } = useBearStore();
+  console.log(collections);
 
   return (
     <>
@@ -50,9 +51,11 @@ const Collections = () => {
         >
           <TabsTrigger value={c.id} className="gap-2">
             {c.title}
-            {!!c.blueprint_count?.count && c.blueprint_count.count > 0 && (
-              <p className="text-steel-500">{c.blueprint_count.count}</p>
-            )}
+            {!!c.blueprint_count &&
+              c.blueprint_count.length > 0 &&
+              c.blueprint_count[0].count > 0 && (
+                <p className="text-steel-500">{c.blueprint_count[0].count}</p>
+              )}
           </TabsTrigger>
         </Link>
       ))}

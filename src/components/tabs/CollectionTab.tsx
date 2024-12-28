@@ -40,6 +40,8 @@ export const CollectionTab = () => {
               updated_at: b.updated_at,
               user_id: b.blueprint_user_id,
               meta: b.meta,
+              background: b.background,
+              image_original_width: b.image_original_width,
             }}
           />
         ))}

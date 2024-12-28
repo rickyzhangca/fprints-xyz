@@ -41,7 +41,12 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    if (session && getProfile.isError && !getProfile.isLoading) {
+    if (
+      session &&
+      getProfile.isError &&
+      !getProfile.isLoading &&
+      !getProfile.data
+    ) {
       navigate(
         blueprintId
           ? `/new-profile?blueprint_id=${blueprintId}`

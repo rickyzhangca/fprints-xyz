@@ -1,6 +1,7 @@
 import { IBlueprintWrapper } from '@/utils/blueprint/types';
 
 export const getBlueprintType = (blueprint: IBlueprintWrapper) => {
+  if (Object.keys(blueprint).length === 0) return '';
   if (blueprint.blueprint) return 'blueprint';
   if (blueprint.blueprint_book) return 'blueprint_book';
   if (blueprint.deconstruction_planner) return 'deconstruction_planner';

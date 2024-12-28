@@ -1,7 +1,5 @@
 import { BlueprintString } from '@/components/blueprint-form/subcomponents/blueprint-string';
 import { Description } from '@/components/blueprint-form/subcomponents/description';
-import { ImageFile } from '@/components/blueprint-form/subcomponents/image-file';
-import { ImageURL } from '@/components/blueprint-form/subcomponents/image-url';
 import { IsPrivate } from '@/components/blueprint-form/subcomponents/is-private';
 import { Tags } from '@/components/blueprint-form/subcomponents/tags';
 import { Title } from '@/components/blueprint-form/subcomponents/title';
@@ -10,14 +8,21 @@ import {
   useCreateBlueprint,
   useUpdateBlueprint,
 } from '@/hooks';
-import { IBlueprintDetails } from '@/supabase';
+import { IBlueprint, IBlueprintDetails } from '@/supabase';
 import { Button, DialogFooter, Form } from '@/ui';
-import { BlueprintUtils, IBlueprintWrapper } from '@/utils';
+import {
+  BlueprintUtils,
+  getImageWidthFromFile,
+  getImageWidthFromUrl,
+  IBlueprintWrapper,
+} from '@/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { create } from 'zustand';
+import { Image } from './subcomponents/image';
 import { Remix } from './subcomponents/remix';
 
 const blueprintFormSchema = z
@@ -34,6 +39,7 @@ const blueprintFormSchema = z
     }),
     image_file: z.instanceof(File).optional(),
     image_url: z.string().url().optional(),
+    background: z.custom<IBlueprint['background']>().optional(),
     is_public: z.boolean(),
     remixed_from_url: z.string().url().optional().or(z.literal('')),
     remixed_from_title: z.string().optional(),
@@ -55,6 +61,22 @@ type CreateBlueprintFormProps = {
   initialValues: ICreateBlueprintFormInitialValues;
 };
 
+/**
+ * for form data, use useFormContext instead
+ */
+export const useBlueprintFormStore = create<{
+  blueprintData: IBlueprintWrapper;
+  setBlueprintData: (blueprintData: IBlueprintWrapper) => void;
+  imageType: 'file' | 'url' | 'fbsr';
+  setImageType: (imageType: 'file' | 'url' | 'fbsr') => void;
+}>(set => ({
+  blueprintData: {},
+  setBlueprintData: (blueprintData: IBlueprintWrapper) =>
+    set({ blueprintData }),
+  imageType: 'file',
+  setImageType: (imageType: 'file' | 'url' | 'fbsr') => set({ imageType }),
+}));
+
 export const BlueprintForm = ({
   mode,
   onSuccess,
@@ -65,9 +87,10 @@ export const BlueprintForm = ({
   const updateBlueprint = useUpdateBlueprint();
   const queryClient = useQueryClient();
   const bunnyUpload = useBunnyUpload();
-  const [blueprintData, setBlueprintData] = useState<IBlueprintWrapper>({});
-  const [imageType, setImageType] = useState<'file' | 'url'>(
-    initialValues.image_url ? 'url' : 'file'
+
+  const blueprintData = useBlueprintFormStore(state => state.blueprintData);
+  const setBlueprintData = useBlueprintFormStore(
+    state => state.setBlueprintData
   );
 
   const form = useForm<ICreateBlueprintFormValues>({
@@ -75,9 +98,16 @@ export const BlueprintForm = ({
     defaultValues: initialValues,
   });
 
+  useEffect(() => form.reset(initialValues), [initialValues]);
+
+  const setImageType = useBlueprintFormStore(state => state.setImageType);
   useEffect(() => {
-    form.reset(initialValues);
-  }, [initialValues]);
+    if (initialValues.image_file) {
+      setImageType('file');
+    } else if (initialValues.image_url) {
+      setImageType('url');
+    }
+  }, []);
 
   const isPending =
     bunnyUpload.isPending ||
@@ -115,15 +145,21 @@ export const BlueprintForm = ({
             description: values.description,
             blueprint_string: values.blueprint_string,
             image_url: url,
-            type: BlueprintUtils.Analysis.getBlueprintType(blueprintData),
+            type:
+              BlueprintUtils.Analysis.getBlueprintType(blueprintData) ||
+              'blueprint',
             game_version: BlueprintUtils.Analysis.getGameVersion(
               'patch',
               blueprintData
             ),
             components: BlueprintUtils.Analysis.getComponents(blueprintData),
             is_public: values.is_public,
+            image_original_width: values.image_file
+              ? await getImageWidthFromFile(values.image_file)
+              : await getImageWidthFromUrl(url),
             remixed_from_url: values.remixed_from_url || null,
             remixed_from_title: values.remixed_from_title || null,
+            background: values.background || 'minimal',
           },
           tags: values.tag_ids,
         },
@@ -149,15 +185,21 @@ export const BlueprintForm = ({
             description: values.description,
             blueprint_string: values.blueprint_string,
             image_url: url,
-            type: BlueprintUtils.Analysis.getBlueprintType(blueprintData),
+            type:
+              BlueprintUtils.Analysis.getBlueprintType(blueprintData) ||
+              'blueprint',
             game_version: BlueprintUtils.Analysis.getGameVersion(
               'patch',
               blueprintData
             ),
             components: BlueprintUtils.Analysis.getComponents(blueprintData),
             is_public: values.is_public,
+            image_original_width: values.image_file
+              ? await getImageWidthFromFile(values.image_file)
+              : await getImageWidthFromUrl(url),
             remixed_from_url: values.remixed_from_url || null,
             remixed_from_title: values.remixed_from_title || null,
+            background: values.background || 'minimal',
           },
           tags: values.tag_ids,
         },
@@ -198,12 +240,7 @@ export const BlueprintForm = ({
           setBlueprintData={setBlueprintData}
         />
         <div className="flex flex-col gap-4">
-          {imageType === 'file' && (
-            <ImageFile form={form} setImageType={setImageType} />
-          )}
-          {imageType === 'url' && (
-            <ImageURL form={form} setImageType={setImageType} />
-          )}
+          <Image />
           <Title />
           <Description />
           <Tags form={form} blueprintData={blueprintData} />

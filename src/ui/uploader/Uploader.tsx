@@ -42,6 +42,9 @@ export const Uploader = ({
 
   const handleRemove = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
     onChange(undefined);
   };
 

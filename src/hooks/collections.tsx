@@ -25,6 +25,7 @@ export const useGetCollections = () => {
         .eq('user_id', session?.user?.id ?? '');
 
       if (error) throw error;
+      //@ts-expect-error somehow it's an array
       return data as ICollectionWithBlueprintCount[];
     },
     enabled: !!session?.user?.id,

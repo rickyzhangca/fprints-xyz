@@ -4,7 +4,7 @@ import { BlueprintUtils, IBlueprintWrapper, iconSchema, tw } from '@/utils';
 export const BlueprintWrapperIcon = ({ data }: { data: IBlueprintWrapper }) => {
   const getCdnUrl = useCdnStore(state => state.getCdnUrl);
 
-  const type = BlueprintUtils.Analysis.getBlueprintType(data);
+  const type = BlueprintUtils.Analysis.getBlueprintType(data) || 'blueprint';
 
   const baseUrl = getCdnUrl(type.replace('_', '-'));
   if (!baseUrl) return null;

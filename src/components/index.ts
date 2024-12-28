@@ -1,3 +1,4 @@
+export * from './background';
 export * from './blueprint-card';
 export * from './blueprint-dialog';
 export * from './blueprint-form';

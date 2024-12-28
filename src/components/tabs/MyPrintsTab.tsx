@@ -47,7 +47,7 @@ export const MyPrintsTab = () => {
         {getMyBlueprints.data &&
           !onlyHasPrivateBlueprints &&
           getMyBlueprints.data.length > 0 && (
-            <div className="flex h-full w-full flex-col justify-between gap-4 rounded-lg bg-steel-950 p-4">
+            <div className="flex w-full flex-col justify-between gap-4 rounded-lg bg-steel-950 p-4 sm:h-[374px]">
               <div className="flex flex-col gap-2">
                 <div className="p-1 text-lg font-medium text-steel-50">
                   Your blueprints at work

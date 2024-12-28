@@ -117,6 +117,7 @@ export type Database = {
       blueprints: {
         Row: {
           _dep: string | null
+          background: Database["public"]["Enums"]["background"] | null
           blueprint_string: string
           components: string[]
           copy_count: number
@@ -124,6 +125,7 @@ export type Database = {
           description: string
           game_version: string
           id: string
+          image_original_width: number | null
           image_url: string
           is_public: boolean
           meta: string[]
@@ -137,6 +139,7 @@ export type Database = {
         }
         Insert: {
           _dep?: string | null
+          background?: Database["public"]["Enums"]["background"] | null
           blueprint_string: string
           components?: string[]
           copy_count?: number
@@ -144,6 +147,7 @@ export type Database = {
           description?: string
           game_version?: string
           id?: string
+          image_original_width?: number | null
           image_url?: string
           is_public?: boolean
           meta?: string[]
@@ -157,6 +161,7 @@ export type Database = {
         }
         Update: {
           _dep?: string | null
+          background?: Database["public"]["Enums"]["background"] | null
           blueprint_string?: string
           components?: string[]
           copy_count?: number
@@ -164,6 +169,7 @@ export type Database = {
           description?: string
           game_version?: string
           id?: string
+          image_original_width?: number | null
           image_url?: string
           is_public?: boolean
           meta?: string[]
@@ -175,50 +181,7 @@ export type Database = {
           updated_at?: string
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["_dep"]
-            isOneToOne: false
-            referencedRelation: "blueprint_card"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["_dep"]
-            isOneToOne: false
-            referencedRelation: "blueprint_details"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["_dep"]
-            isOneToOne: false
-            referencedRelation: "blueprints"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["_dep"]
-            isOneToOne: false
-            referencedRelation: "collection_blueprint_cards"
-            referencedColumns: ["blueprint_id"]
-          },
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["_dep"]
-            isOneToOne: false
-            referencedRelation: "my_blueprint_cards"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["_dep"]
-            isOneToOne: false
-            referencedRelation: "my_liked_blueprint_cards"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       collection_blueprints: {
         Row: {
@@ -514,10 +477,12 @@ export type Database = {
     Views: {
       blueprint_card: {
         Row: {
+          background: Database["public"]["Enums"]["background"] | null
           created_at: string | null
           data_fetched_at: string | null
           game_version: string | null
           id: string | null
+          image_original_width: number | null
           image_url: string | null
           is_public: boolean | null
           like_count: number | null
@@ -538,6 +503,8 @@ export type Database = {
       }
       blueprint_details: {
         Row: {
+          _dep: string | null
+          background: Database["public"]["Enums"]["background"] | null
           blueprint_string: string | null
           collected_by_current_user: boolean | null
           collected_by_current_user_at: string | null
@@ -547,9 +514,9 @@ export type Database = {
           created_at: string | null
           data_fetched_at: string | null
           description: string | null
-          forked_from_id: string | null
           game_version: string | null
           id: string | null
+          image_original_width: number | null
           image_url: string | null
           is_public: boolean | null
           like_count: number | null
@@ -565,53 +532,11 @@ export type Database = {
           user_handle: string | null
           user_id: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["forked_from_id"]
-            isOneToOne: false
-            referencedRelation: "blueprint_card"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["forked_from_id"]
-            isOneToOne: false
-            referencedRelation: "blueprint_details"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["forked_from_id"]
-            isOneToOne: false
-            referencedRelation: "blueprints"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["forked_from_id"]
-            isOneToOne: false
-            referencedRelation: "collection_blueprint_cards"
-            referencedColumns: ["blueprint_id"]
-          },
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["forked_from_id"]
-            isOneToOne: false
-            referencedRelation: "my_blueprint_cards"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "blueprints__dep_fkey"
-            columns: ["forked_from_id"]
-            isOneToOne: false
-            referencedRelation: "my_liked_blueprint_cards"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       collection_blueprint_cards: {
         Row: {
+          background: Database["public"]["Enums"]["background"] | null
           blueprint_id: string | null
           blueprint_user_color: string | null
           blueprint_user_handle: string | null
@@ -626,6 +551,7 @@ export type Database = {
           created_at: string | null
           data_fetched_at: string | null
           game_version: string | null
+          image_original_width: number | null
           image_url: string | null
           is_public: boolean | null
           like_count: number | null
@@ -650,10 +576,12 @@ export type Database = {
       }
       my_blueprint_cards: {
         Row: {
+          background: Database["public"]["Enums"]["background"] | null
           created_at: string | null
           data_fetched_at: string | null
           game_version: string | null
           id: string | null
+          image_original_width: number | null
           image_url: string | null
           is_public: boolean | null
           like_count: number | null
@@ -674,10 +602,12 @@ export type Database = {
       }
       my_liked_blueprint_cards: {
         Row: {
+          background: Database["public"]["Enums"]["background"] | null
           created_at: string | null
           data_fetched_at: string | null
           game_version: string | null
           id: string | null
+          image_original_width: number | null
           image_url: string | null
           is_public: boolean | null
           like_count: number | null
@@ -713,6 +643,21 @@ export type Database = {
       }
     }
     Enums: {
+      background:
+        | "minimal"
+        | "refined-concrete"
+        | "foundation"
+        | "nauvis"
+        | "vulcanus"
+        | "fulgora"
+        | "gleba"
+        | "aquilo"
+        | "space"
+        | "space-nauvis"
+        | "space-vulcanus"
+        | "space-fulgora"
+        | "space-gleba"
+        | "space-aquilo"
       type:
         | "blueprint"
         | "blueprint_book"

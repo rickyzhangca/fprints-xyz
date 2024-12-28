@@ -9,6 +9,7 @@ export const decodeBase64String = (string: string) => {
     );
     return JSON.parse(Pako.inflate(uint8Array, { to: 'string' }));
   } catch (error) {
+    console.error('Failed to decode blueprint:', error);
     return null;
   }
 };
@@ -16,7 +17,7 @@ export const decodeBase64String = (string: string) => {
 export const encodeBase64String = (obj: unknown) => {
   try {
     const compressed = Pako.deflate(JSON.stringify(obj), { level: 9 });
-    
+
     // Convert the compressed data to a string in chunks to avoid stack overflow
     const chunkSize = 8192;
     let result = '';
@@ -24,7 +25,7 @@ export const encodeBase64String = (obj: unknown) => {
       const chunk = compressed.slice(i, i + chunkSize);
       result += String.fromCharCode.apply(null, chunk as unknown as number[]);
     }
-    
+
     return '0' + btoa(result);
   } catch (error) {
     console.error('Failed to encode blueprint:', error);
