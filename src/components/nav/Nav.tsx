@@ -38,7 +38,6 @@ const MyLikes = () => {
 
 const Collections = () => {
   const { collections } = useBearStore();
-  console.log(collections);
 
   return (
     <>

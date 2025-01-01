@@ -31,6 +31,20 @@ export const recommendTags = (blueprint: IBlueprintWrapper) => {
   if (['steam-engine', 'boiler'].some(item => components.includes(item)))
     tags.push('power/steam');
 
+  // base game - circuit
+  if (components.includes('display-panel')) tags.push('circuit/indicator');
+  if (components.includes('display-panel')) tags.push('circuit/counter');
+  if (
+    [
+      'display-panel',
+      'decider-combinator',
+      'constant-combinator',
+      'arithmetic-combinator',
+      'selector-combinator',
+    ].some(item => components.includes(item))
+  )
+    tags.push('circuit');
+
   // base game - railway
   if (
     components.includes('train-stop') &&
@@ -40,13 +54,17 @@ export const recommendTags = (blueprint: IBlueprintWrapper) => {
   )
     tags.push('train-station');
 
-    // base game - logistics
-    if (
-      ['logistic-chest-storage', 'logistic-chest-requester', 'logistic-chest-passive-provider', 'logistic-chest-active-provider', 'logistic-chest-buffer'].some(item =>
-        components.includes(item)
-      )
-    )
-      tags.push('logistics/chest');
+  // base game - logistics
+  if (
+    [
+      'logistic-chest-storage',
+      'logistic-chest-requester',
+      'logistic-chest-passive-provider',
+      'logistic-chest-active-provider',
+      'logistic-chest-buffer',
+    ].some(item => components.includes(item))
+  )
+    tags.push('logistics/chest');
 
   // base game - beacon
   if (components.includes('beacon')) tags.push('production/beacon');
@@ -54,8 +72,8 @@ export const recommendTags = (blueprint: IBlueprintWrapper) => {
   // base game - planners
   if (
     ['upgrade-planner', 'deconstruction-planner'].some(item =>
-          components.includes(item)
-        )
+      components.includes(item)
+    )
   )
     tags.push('planner');
 
@@ -64,7 +82,7 @@ export const recommendTags = (blueprint: IBlueprintWrapper) => {
   if (components.includes('electronic-circuit')) tags.push('circuit/green');
   if (components.includes('advanced-circuit')) tags.push('circuit/red');
   if (components.includes('processing-unit')) tags.push('circuit/purple');
-  
+
   // early return for v1 base game
   const version = BlueprintUtils.Analysis.getGameVersion('major', blueprint);
   if (version === '1') return [...new Set(tags)];

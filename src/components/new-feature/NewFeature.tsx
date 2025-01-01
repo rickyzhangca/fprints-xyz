@@ -54,11 +54,13 @@ export const NewFeature = () => {
   return (
     <div className="fixed inset-x-0 bottom-0 z-60 flex w-full flex-col gap-5 bg-steel-950 px-6 pb-6 pt-5 text-steel-50 shadow-xl-top slide-in-from-left-1/2 md:bottom-4 md:left-auto md:right-4 md:w-[420px] md:rounded-2xl md:shadow-2xl">
       <div className="flex justify-end">
-        <XIcon
-          className="size-4 cursor-pointer"
+        <button
+          className="touch-manipulation p-2 sm:p-0"
           onClick={() => setRemovedNewFeature(KEY)}
           data-umami-event="new-feature-dismiss-no-signup"
-        />
+        >
+          <XIcon className="size-5 sm:size-4" />
+        </button>
       </div>
       <div className="flex flex-col gap-6">
         {content}

@@ -1,10 +1,16 @@
-import { Button } from '@/ui';
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/ui';
 
 import { ImagePreview } from '@/components/blueprint-form/subcomponents/image-preview';
 import { usePostFBSR } from '@/hooks';
 import { FormControl, FormField, FormItem } from '@/ui';
 import { BlueprintUtils } from '@/utils';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import {
   ICreateBlueprintFormValues,
@@ -17,7 +23,6 @@ export const ImageFBSR = () => {
 
   const form = useFormContext<ICreateBlueprintFormValues>();
   const background = form.watch('background');
-  const blueprintString = form.watch('blueprint_string');
   const imageFile = form.watch('image_file');
 
   const setImageType = useBlueprintFormStore(state => state.setImageType);
@@ -27,11 +32,32 @@ export const ImageFBSR = () => {
     () => BlueprintUtils.Analysis.getBlueprintType(blueprintData),
     [blueprintData]
   );
+  const blueprintList = useMemo(
+    () => BlueprintUtils.Analysis.getFlatBlueprintList(blueprintData),
+    [blueprintData]
+  );
+
+  const [selectedBlueprintString, setSelectedBlueprintString] = useState<
+    string | null
+  >(blueprintList.find(item => item.type === 'blueprint')?.value ?? null);
+
+  const selectedBlueprintTitle = useMemo(
+    () =>
+      blueprintList.find(item => item.value === selectedBlueprintString)
+        ?.label ?? null,
+    [blueprintList, selectedBlueprintString]
+  );
 
   const handleRender = useCallback(() => {
-    if (!blueprintString) return;
-    mutate(blueprintString);
-  }, [blueprintString, mutate]);
+    if (!selectedBlueprintString) return;
+    mutate(selectedBlueprintString);
+  }, [selectedBlueprintString, mutate]);
+
+  useEffect(() => {
+    setSelectedBlueprintString(
+      blueprintList.find(item => item.type === 'blueprint')?.value ?? null
+    );
+  }, [blueprintList]);
 
   useEffect(() => {
     if (isSuccess && data?.image) {
@@ -69,10 +95,12 @@ export const ImageFBSR = () => {
             background={background}
             file={imageFile}
             placeholder={
-              !blueprintString
-                ? 'Please paste a blueprint string first'
+              !selectedBlueprintString
+                ? blueprintList.length > 0
+                  ? 'Only blueprints and blueprints in blueprint books are supported for now'
+                  : 'Please paste a blueprint string first'
                 : type !== 'blueprint'
-                  ? 'Only available for valid single blueprint right now. Support for blueprint books coming soon.'
+                  ? 'Choose a blueprint in the book to render as the screenshot.'
                   : isError
                     ? `Something went wrong. Probably because FBSR is still being updated for 2.0, let's post a screenshot instead!${
                         error?.message ? `\nError: "${error?.message}"` : ''
@@ -82,9 +110,28 @@ export const ImageFBSR = () => {
                       : 'Click to render. It may take seconds to a minute depending on the blueprint size, result will show here'
             }
           />
+          {selectedBlueprintString && type === 'blueprint_book' && (
+            <DropdownMenu>
+              <DropdownMenuTrigger type="button">
+                {selectedBlueprintTitle ?? 'Choose a blueprint'}
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[var(--radix-dropdown-menu-trigger-width)]">
+                {blueprintList.map(item => (
+                  <DropdownMenuItem
+                    key={item.path}
+                    style={{ paddingLeft: item.depth * 16 + 8 }}
+                    disabled={item.type !== 'blueprint'}
+                    onSelect={() => setSelectedBlueprintString(item.value)}
+                  >
+                    {item.label}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           <FormControl>
             <Button
-              disabled={!blueprintString || type !== 'blueprint'}
+              disabled={!selectedBlueprintString}
               loading={isPending}
               type="button"
               onClick={handleRender}

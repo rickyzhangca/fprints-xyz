@@ -8,8 +8,9 @@ import {
   countComponents,
 } from '@/utils/blueprint/count-components';
 import { getComponents } from '@/utils/blueprint/get-components';
+import { getFlatBlueprintList } from '@/utils/blueprint/get-flat-blueprint-list';
 import { getGameVersion } from '@/utils/blueprint/get-game-version';
-import { getBlueprintType } from '@/utils/blueprint/get-type';
+import { BlueprintType, getBlueprintType } from '@/utils/blueprint/get-type';
 import { recommendTags } from '@/utils/blueprint/recommend-tags';
 import { swap } from '@/utils/blueprint/swap';
 import { validateJson } from '@/utils/blueprint/validate-json';
@@ -24,6 +25,7 @@ export const BlueprintUtils = {
     recommendTags,
     cleanUpLabel,
     getBlueprintType,
+    getFlatBlueprintList,
   },
   Conversion: {
     encodeBase64String,
@@ -36,4 +38,4 @@ export const BlueprintUtils = {
 };
 
 export * from './types';
-export type { ComponentCounts };
+export type { BlueprintType, ComponentCounts };
